@@ -1,3 +1,10 @@
+# example-auth0-on-nextjs
+
+- https://nextjs.org/docs
+- https://auth0.com/docs/quickstart/webapp/nextjs
+
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
