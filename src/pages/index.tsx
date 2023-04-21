@@ -9,6 +9,9 @@ const inter = Inter({subsets: ['latin']})
 
 export default function Home() {
   const {user, error, isLoading, checkSession} = useUser()
+  if (user != null) {
+    console.debug('#####', JSON.stringify({ user }, null, 2));
+  }
 
   return (
     <>
@@ -110,4 +113,9 @@ export default function Home() {
       </main>
     </>
   )
+}
+
+export const getServerSideProps = () => {
+  process.stdout.write('### Server Side Log ###\n')
+  return {props: {}}
 }
