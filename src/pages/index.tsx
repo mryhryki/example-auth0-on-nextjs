@@ -8,7 +8,7 @@ import Link from "next/link";
 const inter = Inter({subsets: ['latin']})
 
 export default function Home() {
-  const {user, error, isLoading, checkSession} = useUser()
+  const {user, error, isLoading} = useUser()
   if (user != null) {
     console.debug('#####', JSON.stringify({ user }, null, 2));
   }
