@@ -18,20 +18,25 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   process.stdout.write(`### Access Token ###\n${JSON.stringify(accessTokenResult, null, 2)}\n`)
 
   // [User Profile]
-  // const user: UserProfile = (serverSideProps as any /* FIXME */).props.user
+  const user: UserProfile = (serverSideProps as any /* FIXME */).props.user
   // process.stdout.write(`### User Profile ###\n${JSON.stringify(user, null, 2)}\n`)
-  // const {hostname} = new URL(process.env.AUTH0_ISSUER_BASE_URL ?? "")
 
   // [User Info]
-  // const client = new ManagementClient({
-  //   token: process.env.AUTH0_MANAGEMENT_API_TOKEN ?? "",
-  //   domain: hostname,
-  // })
-  // // @ts-ignore
-  // const auth0User = await client.getUser({id: user.sub ?? ""})
+  const {hostname} = new URL(process.env.AUTH0_ISSUER_BASE_URL ?? "")
+  const client = new ManagementClient({
+    token: process.env.AUTH0_MANAGEMENT_API_TOKEN ?? "",
+    domain: hostname,
+  })
+
+  const userId = user.sub ?? 'unknown'
+  await client.updateUser({id: userId}, {app_metadata: {Role: "Admin", updatedBy: '{UserID}'}})
+  const auth0User = await client.getUser({id: userId})
+  process.stdout.write(`### Server Side Log 4 ###\n${JSON.stringify({auth0User}, null, 2)}\n`)
+
+  // [Role and Permissions]
   // const userRoles = await client.getUserRoles({id: user.sub ?? ""})
   // const userPermissions = await client.getUserPermissions({id: user.sub ?? ""})
-  // process.stdout.write(`### Server Side Log 4 ###\n${JSON.stringify({ auth0User, userRoles, userPermissions}, null, 2)}\n`)
+  // process.stdout.write(`### Role and Permissions ###\n${JSON.stringify({ userRoles, userPermissions}, null, 2)}\n`)
 
   return serverSideProps
 }
