@@ -117,39 +117,4 @@ export default function Home() {
   )
 }
 
-// You can optionally pass your own `getServerSideProps` function into
-// `withPageAuthRequired` and the props will be merged with the `user` prop
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const serverSideProps = await withPageAuthRequired()(ctx);
-
-  // [Session]
-  const session = await getSession(ctx.req, ctx.res).catch(() => null);
-  process.stdout.write(`### Session ###\n${JSON.stringify(session, null, 2)}\n`)
-
-  // [Access Token]
-  const accessTokenResult = await getAccessToken(ctx.req, ctx.res).catch(() => null)
-  process.stdout.write(`### Access Token ###\n${JSON.stringify(accessTokenResult, null, 2)}\n`)
-
-  // // [User Profile]
-  // const user: UserProfile = (serverSideProps as any /* FIXME */)?.props?.user
-  // process.stdout.write(`### User Profile ###\n${JSON.stringify(user, null, 2)}\n`)
-
-  // [User Info]
-  // const {hostname} = new URL(process.env.AUTH0_ISSUER_BASE_URL ?? "")
-  // const client = new ManagementClient({
-  //   token: process.env.AUTH0_MANAGEMENT_API_TOKEN ?? "",
-  //   domain: hostname,
-  // })
-
-  // const userId = user.sub ?? 'unknown'
-  // await client.updateUser({id: userId}, {app_metadata: {Role: "Admin", updatedBy: '{UserID}'}})
-  // const auth0User = await client.getUser({id: userId})
-  // process.stdout.write(`### Server Side Log 4 ###\n${JSON.stringify({auth0User}, null, 2)}\n`)
-
-  // [Role and Permissions]
-  // const userRoles = await client.getUserRoles({id: user.sub ?? ""})
-  // const userPermissions = await client.getUserPermissions({id: user.sub ?? ""})
-  // process.stdout.write(`### Role and Permissions ###\n${JSON.stringify({ userRoles, userPermissions}, null, 2)}\n`)
-
-  return serverSideProps
-}
+export const getServerSideProps = withPageAuthRequired()
