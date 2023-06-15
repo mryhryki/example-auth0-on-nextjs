@@ -6,14 +6,15 @@ import {UserProfile, useUser} from "@auth0/nextjs-auth0/client";
 import Link from "next/link";
 import {getAccessToken, getSession, withPageAuthRequired} from "@auth0/nextjs-auth0";
 import {GetServerSidePropsContext} from "next";
+import {useFetchTest} from "@/hooks/useFetchTest";
+import {useElapsedSec} from "@/hooks/useElapsedSec";
 
 const inter = Inter({subsets: ['latin']})
 
 export default function Home() {
   const {user, error, isLoading} = useUser()
-  if (user != null) {
-    console.debug('#####', JSON.stringify({ user }, null, 2));
-  }
+  const {fetchTest, testResults, lastRequestUnixTime} = useFetchTest()
+  const elapsedSec = useElapsedSec(lastRequestUnixTime)
 
   return (
     <>
@@ -24,93 +25,23 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico"/>
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>src/pages/index.tsx</code>
-          </p>
+        <header className={styles.header}>
+          <span className={styles.userName}>{user?.email ?? '(Not logged in)'}</span>
+          {user != null ? (
+            <Link href="/api/auth/logout">Logout</Link>
+          ) : (
+            <Link href="/api/auth/login">Login</Link>
+          )}
+        </header>
+
+        <div className={styles.content}>
           <div>
-            {(() => {
-              if (isLoading) {
-                return "Loading..."
-              } else if (error != null) {
-                return error.message;
-              } else if (user != null) {
-                return <Link href="/api/auth/logout">{user.email}</Link>
-              }
-              return <Link href="/api/auth/login">Login</Link>
-            })()}
+            <button onClick={fetchTest}>Fetch Test</button>
+            <span>(Elapsed: {Math.floor(elapsedSec / 60)}:{(elapsedSec % 60).toString(10).padStart(2, '0')})</span>
           </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
+          <div>
+            <pre>{JSON.stringify(testResults, null, 2)}</pre>
+          </div>
         </div>
       </main>
     </>
