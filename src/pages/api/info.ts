@@ -1,23 +1,32 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
-import {GetServerSidePropsContext} from "next";
-import {getSession, withPageAuthRequired} from "@auth0/nextjs-auth0";
+import type {NextApiRequest, NextApiResponse} from 'next'
+import {getSession, getAccessToken, withApiAuthRequired} from "@auth0/nextjs-auth0";
+import {Session} from "@auth0/nextjs-auth0/src/session";
 
 type Data = {
-  name: string
+  session: Session | null
+  accessToken: string
 }
 
-export default function handler(
+export default withApiAuthRequired(async (
   req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-  res.status(200).json({ name: 'John Doe' })
-}
+  res: NextApiResponse<Data | { error: unknown }>
+) => {
+  try {
+    await sleep(req.query.apiExecuteBeforeDelay)
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const serverSideProps = await withPageAuthRequired()(ctx);
+    const session = (await getSession(req, res)) ?? null
+    const accessToken = (await getAccessToken(req, res, {})).accessToken ?? "(None)"
 
-  // [Session]
-  const session = await getSession(ctx.req, ctx.res).catch(() => null);
-  process.stdout.write(`### Session ###\n${JSON.stringify(session, null, 2)}\n`)
+    await sleep(req.query.apiExecuteAfterDelay)
+    res.status(200).json({session, accessToken})
+  } catch (err) {
+    res.status(500).json({error: err})
+  }
+})
+
+const sleep = async (val: unknown): Promise<void> => {
+  const sec = parseInt(String(val), 10)
+  if (isNaN(sec) || sec < 1 || 60 < sec) return
+  await new Promise((resolve) => setTimeout(resolve, sec * 1000))
 }

@@ -64,9 +64,16 @@ export const useFetchTest = (): UseFetchTestState => {
       if (setting.requestDelay > 0) {
         await new Promise((resolve) => setTimeout(resolve, setting.requestDelay * 1000))
       }
+      const url = new URL("/api/info", location.href)
+      if (setting.apiExecuteBeforeDelay > 0) {
+        url.searchParams.set('apiExecuteBeforeDelay', setting.apiExecuteBeforeDelay.toString(10))
+      }
+      if (setting.apiExecuteAfterDelay > 0) {
+        url.searchParams.set('apiExecuteAfterDelay', setting.apiExecuteAfterDelay.toString(10))
+      }
       const id = getId('R')
-      const response = await fetch("/api/info")
-      const body = await response.text();
+      const response = await fetch(url, {credentials: "same-origin"})
+      const body = await response.json();
       setTestResults((currentResults) => currentResults.map((currentResult) => {
         if (currentResult.settingId !== setting.id) {
           return currentResult

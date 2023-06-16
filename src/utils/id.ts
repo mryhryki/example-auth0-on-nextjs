@@ -1,4 +1,5 @@
-let i = 0;
 export const getId = (prefix: string): string => {
-  return `${prefix}${(i++).toString(10).padStart(4, '0')}`
+  const arr = new Uint8Array(4)
+  crypto.getRandomValues(arr)
+  return `${prefix}-${Array.from(arr).map((i): string => i.toString(16)).join("")}`
 }
