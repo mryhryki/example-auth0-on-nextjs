@@ -15,16 +15,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Auth0 Settings
 
-### API
-
-#### Token Settings
-
-- Token Expiration (Seconds): `90`
-
-#### Access Settings
-
-- Allow Offline Access: `ON`
-
 ### Application
 
 #### ID Token
@@ -42,3 +32,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - Absolute Lifetime: `900` seconds
 - Inactivity Expiration: `ON`
 - Inactivity Lifetime: `300` seconds
+
+### API
+
+#### Token Settings
+
+- Token Expiration (Seconds): `90`
+
+#### Access Settings
+
+- Allow Offline Access: `ON`

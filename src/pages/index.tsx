@@ -5,7 +5,7 @@ import Link from "next/link";
 import {withPageAuthRequired} from "@auth0/nextjs-auth0";
 import {useFetchTest} from "@/hooks/useFetchTest";
 import {useElapsedSec} from "@/hooks/useElapsedSec";
-import {useRef} from "react";
+import {useMemo} from "react";
 
 export default function Home() {
   const {user} = useUser()
@@ -19,6 +19,10 @@ export default function Home() {
     removeSetting
   } = useFetchTest()
   const elapsedSec = useElapsedSec(lastRequestedUnixTime)
+
+  const testResultJson = useMemo(() => {
+    return JSON.stringify(testResults, null, 2)
+  }, [testResults])
 
   return (
     <>
@@ -89,12 +93,13 @@ export default function Home() {
             <button onClick={addSetting}>Add Setting</button>
             <button onClick={fetchTest} disabled={settings.length < 1}>Fetch Test</button>
             <span>(Elapsed: {Math.floor(elapsedSec / 60)}:{(elapsedSec % 60).toString(10).padStart(2, '0')})</span>
+            <button onClick={() => navigator.clipboard.writeText(testResultJson)} disabled={settings.length < 1}>Copy Result</button>
           </div>
           <pre
             onChange={() => undefined}
             className={styles.testResult}
           >
-          {JSON.stringify(testResults, null, 2)}
+            {testResultJson}
           </pre>
         </div>
       </main>
