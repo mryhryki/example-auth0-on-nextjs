@@ -8,13 +8,24 @@ import {getAccessToken, getSession, withPageAuthRequired} from "@auth0/nextjs-au
 import {GetServerSidePropsContext} from "next";
 import {useFetchTest} from "@/hooks/useFetchTest";
 import {useElapsedSec} from "@/hooks/useElapsedSec";
+import {useRef} from "react";
 
 const inter = Inter({subsets: ['latin']})
 
 export default function Home() {
   const {user, error, isLoading} = useUser()
-  const {fetchTest, testResults, lastRequestUnixTime} = useFetchTest()
+  const {
+    fetchTest,
+    testResults,
+    lastRequestUnixTime,
+    settings,
+    addSetting,
+    editSetting,
+    removeSetting
+  } = useFetchTest()
   const elapsedSec = useElapsedSec(lastRequestUnixTime)
+
+  const testResultRef = useRef<HTMLTextAreaElement | null>(null)
 
   return (
     <>
@@ -35,13 +46,64 @@ export default function Home() {
         </header>
 
         <div className={styles.content}>
-          <div>
-            <button onClick={fetchTest}>Fetch Test</button>
+          <ol>
+            {settings.map((setting) => (
+              <li key={setting.id} className={styles.settingElement}>
+                <code>ID:{setting.id}</code>
+                <div>
+                  <label>
+                    <span>RequestDelay:</span>
+                    <input
+                      type="number"
+                      className={styles.numberInput}
+                      value={setting.requestDelay}
+                      onChange={(event) => editSetting(setting.id, {requestDelay: parseInt(event.target.value, 10)})}
+                    />
+                    <span>sec</span>
+                  </label>
+                </div>
+                <div>
+                  <label>
+                    <span>ApiExecuteBeforeDelay:</span>
+                    <input
+                      type="number"
+                      className={styles.numberInput}
+                      value={setting.apiExecuteBeforeDelay}
+                      onChange={(event) => editSetting(setting.id, {apiExecuteBeforeDelay: parseInt(event.target.value, 10)})}
+                    />
+                    <span>sec</span>
+                  </label>
+                </div>
+                <div>
+                  <label>
+                    <span>ApiExecuteAfterDelay:</span>
+                    <input
+                      type="number"
+                      className={styles.numberInput}
+                      value={setting.apiExecuteAfterDelay}
+                      onChange={(event) => editSetting(setting.id, {apiExecuteAfterDelay: parseInt(event.target.value, 10)})}
+                    />
+                    <span>sec</span>
+                  </label>
+                </div>
+                <div className={styles.settingButtons}>
+                  <button onClick={() => removeSetting(setting.id)}>Remove</button>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <div className={styles.actionButtons}>
+            <button onClick={addSetting}>Add Setting</button>
+            <button onClick={fetchTest} disabled={settings.length < 1}>Fetch Test</button>
             <span>(Elapsed: {Math.floor(elapsedSec / 60)}:{(elapsedSec % 60).toString(10).padStart(2, '0')})</span>
           </div>
-          <div>
-            <pre>{JSON.stringify(testResults, null, 2)}</pre>
-          </div>
+          <textarea
+            style={{height: Math.max(10, testResultRef.current?.scrollHeight ?? 0)}}
+            ref={testResultRef}
+            onChange={() => undefined}
+            value={JSON.stringify(testResults, null, 2)}
+            className={styles.testResult}
+          />
         </div>
       </main>
     </>
