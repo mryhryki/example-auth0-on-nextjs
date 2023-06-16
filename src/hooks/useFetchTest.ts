@@ -1,5 +1,6 @@
 import {useCallback, useRef, useState} from "react";
 import {getId} from "@/utils/id";
+import {useStateWithStorage} from "@/hooks/useStateWithStorage";
 
 interface TestResultWaiting {
   type: "waiting"
@@ -27,7 +28,7 @@ interface TestSetting {
 interface UseFetchTestState {
   fetchTest: () => Promise<void>
   testResults: TestResult[]
-  lastRequestUnixTime: number
+  lastRequestedUnixTime: number | null
   settings: TestSetting[]
   addSetting: () => void
   editSetting: (id: string, settings: Partial<TestSetting>) => void
@@ -45,7 +46,7 @@ const getValidSetting = (setting: Partial<TestSetting>): TestSetting => {
 }
 
 export const useFetchTest = (): UseFetchTestState => {
-  const [settings, setSettings] = useState<TestSetting[]>([])
+  const [settings, setSettings] = useStateWithStorage<TestSetting[]>([], 'settings')
   const addSetting = useCallback((): void =>
     setSettings((currentSettings) => [...currentSettings, getValidSetting({})]), [setSettings])
   const editSetting = useCallback((id: string, setting: Partial<TestSetting>) => {
@@ -57,8 +58,9 @@ export const useFetchTest = (): UseFetchTestState => {
   }, [setSettings])
 
   const [testResults, setTestResults] = useState<TestResult[]>([])
-  const lastRequestUnixTime = useRef<number>(new Date().getTime())
+  const [lastRequestedUnixTime, setLastRequestedUnixTime] = useState<number|null>(null)
   const fetchTest = async (): Promise<void> => {
+    setLastRequestedUnixTime(null)
     setTestResults(settings.map((setting): TestResultWaiting => ({type: 'waiting', settingId: setting.id})))
     await Promise.all(settings.map(async (setting) => {
       if (setting.requestDelay > 0) {
@@ -88,12 +90,12 @@ export const useFetchTest = (): UseFetchTestState => {
         }
       }))
     }))
-    lastRequestUnixTime.current = new Date().getTime()
+    setLastRequestedUnixTime(new Date().getTime())
   }
 
   return {
     fetchTest,
-    lastRequestUnixTime: lastRequestUnixTime.current,
+    lastRequestedUnixTime,
     testResults,
     settings,
     addSetting,

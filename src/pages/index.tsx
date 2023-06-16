@@ -12,13 +12,13 @@ export default function Home() {
   const {
     fetchTest,
     testResults,
-    lastRequestUnixTime,
+    lastRequestedUnixTime,
     settings,
     addSetting,
     editSetting,
     removeSetting
   } = useFetchTest()
-  const elapsedSec = useElapsedSec(lastRequestUnixTime)
+  const elapsedSec = useElapsedSec(lastRequestedUnixTime)
 
   return (
     <>

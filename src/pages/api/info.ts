@@ -4,8 +4,8 @@ import {getSession, getAccessToken, withApiAuthRequired} from "@auth0/nextjs-aut
 import {Session} from "@auth0/nextjs-auth0/src/session";
 
 type Data = {
-  session: Session | null
   accessToken: string
+  session: Session | null
 }
 
 export default withApiAuthRequired(async (
@@ -15,11 +15,14 @@ export default withApiAuthRequired(async (
   try {
     await sleep(req.query.apiExecuteBeforeDelay)
 
+    const accessToken = (await getAccessToken(req, res, {
+      // refresh: true,
+      // scopes: ["openid", "profile", "email", "offline_access"]
+    })).accessToken ?? "(None)"
     const session = (await getSession(req, res)) ?? null
-    const accessToken = (await getAccessToken(req, res, {})).accessToken ?? "(None)"
 
     await sleep(req.query.apiExecuteAfterDelay)
-    res.status(200).json({session, accessToken})
+    res.status(200).json({accessToken, session})
   } catch (err) {
     res.status(500).json({error: err})
   }

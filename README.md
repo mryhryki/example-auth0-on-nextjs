@@ -15,20 +15,28 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Auth0 Settings
 
-### Token Settings
+### API
+
+#### Token Settings
 
 - Token Expiration (Seconds): `90`
 
-### ID Token
+#### Access Settings
+
+- Allow Offline Access: `ON`
+
+### Application
+
+#### ID Token
 
 - ID Token Expiration: `120` seconds
 
-### Refresh Token Rotation
+#### Refresh Token Rotation
 
 - Rotation: `ON`
 - Reuse Interval: `1` seconds
 
-### Refresh Token Expiration
+#### Refresh Token Expiration
 
 - Absolute Expiration: `ON`
 - Absolute Lifetime: `900` seconds
