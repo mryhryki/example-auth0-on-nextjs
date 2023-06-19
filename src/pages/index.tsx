@@ -61,24 +61,12 @@ export default function Home() {
                 </div>
                 <div>
                   <label>
-                    <span>ApiExecuteBeforeDelay:</span>
+                    <span>ApiExecuteDelay:</span>
                     <input
                       type="number"
                       className={styles.numberInput}
-                      value={setting.apiExecuteBeforeDelay}
-                      onChange={(event) => editSetting(setting.id, {apiExecuteBeforeDelay: parseInt(event.target.value, 10)})}
-                    />
-                    <span>sec</span>
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    <span>ApiExecuteAfterDelay:</span>
-                    <input
-                      type="number"
-                      className={styles.numberInput}
-                      value={setting.apiExecuteAfterDelay}
-                      onChange={(event) => editSetting(setting.id, {apiExecuteAfterDelay: parseInt(event.target.value, 10)})}
+                      value={setting.apiExecuteDelay}
+                      onChange={(event) => editSetting(setting.id, {apiExecuteDelay: parseInt(event.target.value, 10)})}
                     />
                     <span>sec</span>
                   </label>
