@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "auth0:export": "a0deploy export --format=yaml --config_file=./auth0-deploy-cli/config.json --output_folder ./auth0-deploy-cli/"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^2.5.0",
@@ -16,6 +17,7 @@
     "@types/react": "18.0.37",
     "@types/react-dom": "18.0.11",
     "auth0": "^3.3.0",
+    "auth0-deploy-cli": "^7.17.5",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
     "next": "13.3.0",

@@ -15,6 +15,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Auth0 Settings
 
+### Deploy by CLI
+
+```shell
+$ npm run auth0:deploy
+```
+
 ### Application
 
 #### ID Token
