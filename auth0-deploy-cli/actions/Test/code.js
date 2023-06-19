@@ -4,14 +4,8 @@
 * @param {Event} event - Details about the user and the context in which they are logging in.
 * @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.
 */
-exports.onExecutePostLogin = async (event, api) => {
-  console.log(`event.transaction.protocol: ${event.transaction?.protocol}`)
-  if (event.transaction?.protocol === 'oauth2-refresh-token') {
-    const message = "reject_test"
-    console.log(message)
-    api.access.deny(message);
-    }
-};
+// exports.onExecutePostLogin = async (event, api) => {
+// };
 
 
 /**

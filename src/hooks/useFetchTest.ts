@@ -21,8 +21,7 @@ type TestResult = TestResultWaiting | TestResultFinished
 interface TestSetting {
   id: string
   requestDelay: number
-  apiExecuteBeforeDelay: number
-  apiExecuteAfterDelay: number
+  apiExecuteDelay: number
 }
 
 interface UseFetchTestState {
@@ -40,8 +39,7 @@ const getValidSetting = (setting: Partial<TestSetting>): TestSetting => {
   return ({
     id,
     requestDelay: Math.max(0, Math.min(setting.requestDelay ?? 0, 60)),
-    apiExecuteBeforeDelay: Math.max(0, Math.min(setting.apiExecuteBeforeDelay ?? 0, 60)),
-    apiExecuteAfterDelay: Math.max(0, Math.min(setting.apiExecuteAfterDelay ?? 0, 60)),
+    apiExecuteDelay: Math.max(0, Math.min(setting.apiExecuteDelay ?? 0, 60)),
   })
 }
 
@@ -67,11 +65,8 @@ export const useFetchTest = (): UseFetchTestState => {
         await new Promise((resolve) => setTimeout(resolve, setting.requestDelay * 1000))
       }
       const url = new URL("/api/info", location.href)
-      if (setting.apiExecuteBeforeDelay > 0) {
-        url.searchParams.set('apiExecuteBeforeDelay', setting.apiExecuteBeforeDelay.toString(10))
-      }
-      if (setting.apiExecuteAfterDelay > 0) {
-        url.searchParams.set('apiExecuteAfterDelay', setting.apiExecuteAfterDelay.toString(10))
+      if (setting.apiExecuteDelay > 0) {
+        url.searchParams.set('apiExecuteDelay', setting.apiExecuteDelay.toString(10))
       }
       const id = getId('R')
       const response = await fetch(url, {credentials: "same-origin"})

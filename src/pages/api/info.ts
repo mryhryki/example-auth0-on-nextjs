@@ -13,15 +13,13 @@ export default withApiAuthRequired(async (
   res: NextApiResponse<Data | { error: unknown }>
 ) => {
   try {
-    await sleep(req.query.apiExecuteBeforeDelay)
+    await sleep(req.query.apiExecuteDelay)
 
     const accessToken = (await getAccessToken(req, res, {
-      // refresh: true,
-      // scopes: ["openid", "profile", "email", "offline_access"]
+    //   refresh: true,
     })).accessToken ?? "(None)"
     const session = (await getSession(req, res)) ?? null
 
-    await sleep(req.query.apiExecuteAfterDelay)
     res.status(200).json({accessToken, session})
   } catch (err) {
     res.status(500).json({error: err})
