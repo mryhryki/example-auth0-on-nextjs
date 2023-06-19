@@ -18,7 +18,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ### Deploy by CLI
 
 ```shell
-$ npm run auth0:deploy
+$ npm run auth0:import
 ```
 
 ### Application

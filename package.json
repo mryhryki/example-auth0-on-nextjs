@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "auth0:export": "a0deploy export --format=yaml --config_file=./auth0-deploy-cli/config.json --output_folder ./auth0-deploy-cli/"
+    "auth0:import": "a0deploy import --config_file=./auth0-deploy-cli/config.json --input_file ./auth0-deploy-cli/tenant.yaml",
+    "auth0:export": "a0deploy export --config_file=./auth0-deploy-cli/config.json --output_folder ./auth0-deploy-cli/ --format=yaml"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^2.5.0",
