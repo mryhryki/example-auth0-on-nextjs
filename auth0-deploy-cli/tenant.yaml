@@ -83,12 +83,12 @@ clients:
     oidc_conformant: true
     refresh_token:
       expiration_type: expiring
-      leeway: 1
+      leeway: 0
       infinite_token_lifetime: false
       infinite_idle_token_lifetime: false
       token_lifetime: 900
       idle_token_lifetime: 300
-      rotation_type: rotating
+      rotation_type: non-rotating
     sso_disabled: false
     token_endpoint_auth_method: client_secret_post
 databases:
@@ -180,7 +180,17 @@ prompts:
   universal_login_experience: new
 migrations: {}
 actions:
-triggers:
+  - name: Test
+    code: ./actions/Test/code.js
+    dependencies: []
+    deployed: true
+    runtime: node16
+    secrets: []
+    status: built
+    supported_triggers:
+      - id: post-login
+        version: v3
+triggers: {}
 organizations: []
 attackProtection:
   breachedPasswordDetection:
