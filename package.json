@@ -11,19 +11,19 @@
     "auth0:export": "a0deploy export --config_file=./auth0-deploy-cli/config.json --output_folder ./auth0-deploy-cli/ --format=yaml"
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^2.5.0",
-    "@nestjs/passport": "^9.0.3",
-    "@types/auth0": "^3.3.1",
-    "@types/node": "18.15.11",
-    "@types/react": "18.0.37",
-    "@types/react-dom": "18.0.11",
-    "auth0": "^3.3.0",
-    "auth0-deploy-cli": "^7.17.5",
-    "eslint": "8.38.0",
-    "eslint-config-next": "13.3.0",
-    "next": "13.3.0",
+    "@auth0/nextjs-auth0": "^3.3.0",
+    "@nestjs/passport": "^10.0.2",
+    "@types/auth0": "^3.3.9",
+    "@types/node": "20.9.2",
+    "@types/react": "18.2.37",
+    "@types/react-dom": "18.2.15",
+    "auth0": "^4.1.0",
+    "auth0-deploy-cli": "^7.19.0",
+    "eslint": "8.54.0",
+    "eslint-config-next": "14.0.3",
+    "next": "14.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "typescript": "5.0.4"
+    "typescript": "5.2.2"
   }
 }
