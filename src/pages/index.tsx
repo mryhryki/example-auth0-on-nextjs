@@ -2,6 +2,7 @@ import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import Link from "next/link";
 
 export default function Home() {
   const { user } = useUser();
@@ -21,7 +22,7 @@ export default function Home() {
           <pre>{JSON.stringify(user, null, 2)}</pre>
         </section>
         <section>
-          <a href="/api/auth/logout">Logout</a>
+          <Link href="/api/auth/logout">Logout</Link>
         </section>
       </main>
     </>

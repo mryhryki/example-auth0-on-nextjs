@@ -14,7 +14,7 @@ export const useStateWithStorage = <T>(initialState: T, key: string): [T, Dispat
   useEffect(() => {
     if (!('window' in globalThis) || JSON.stringify(initialState) === JSON.stringify(state)) return
     window.localStorage.setItem(key, JSON.stringify(state))
-  }, [key, state]);
+  }, [initialState, key, state]);
 
   return [state, setState];
 

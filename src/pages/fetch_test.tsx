@@ -7,7 +7,7 @@ import {useFetchTest} from "@/hooks/useFetchTest";
 import {useElapsedSec} from "@/hooks/useElapsedSec";
 import {useMemo} from "react";
 
-export default function fetchTest() {
+export default function FetchTest() {
   const {user} = useUser()
   const {
     fetchTest,
