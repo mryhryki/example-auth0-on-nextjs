@@ -8,6 +8,7 @@ const login = async (req, res) => {
     authorizationParams: {
       invitation: req.query.invitation,
       organization: req.query.organization,
+      connection: req.query.connection,
     },
   });
 };
