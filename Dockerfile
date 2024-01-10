@@ -17,7 +17,7 @@ RUN npm run build
 
 ENTRYPOINT ["npm", "start"]
 
-# How to User
+# How to Use
 #
 # $ docker build . -t example-auth0-on-nextjs
 # $ docker run -p 3000:3000 --env AUTH0_CLIENT_ID=dummy example-auth0-on-nextjs
