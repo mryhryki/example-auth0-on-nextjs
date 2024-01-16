@@ -11,7 +11,7 @@
     "auth0:export": "a0deploy export --config_file=./auth0-deploy-cli/config.json --output_folder ./auth0-deploy-cli/ --format=yaml"
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^3.3.0",
+    "@auth0/nextjs-auth0": "mryhryki/nextjs-auth0.git#e49c94546367a2e08165125411ddfc2202d4005f",
     "@nestjs/passport": "^10.0.2",
     "@types/auth0": "^3.3.9",
     "@types/node": "20.9.2",
