@@ -1,43 +1,17 @@
 // pages/api/auth/[...auth0].js
 import { initAuth0 } from "@auth0/nextjs-auth0";
-import { serialize } from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 
-let defaultAuth0: ReturnType<typeof initAuth0>;
-let anotherAuth0: ReturnType<typeof initAuth0>;
-
-function filterOptionalBool(value: unknown): boolean | undefined {
-  switch (value) {
-    case "true":
-      return true;
-    case "false":
-      return false;
-    default:
-      return undefined;
+function getAuth(req: NextApiRequest): ReturnType<typeof initAuth0> {
+  const switchAnotherApplication: boolean = req.query.switchAnotherApplication === "true";
+  if (switchAnotherApplication) {
+    return initAuth0({
+      clientID: process.env.AUTH0_CLIENT_ID_ANOTHER_APPLICATION,
+      clientSecret: process.env.AUTH0_CLIENT_SECRET_ANOTHER_APPLICATION,
+    });
+  } else {
+    return initAuth0({});
   }
-};
-
-function getAuth(req: NextApiRequest, res: NextApiResponse): ReturnType<typeof initAuth0> {
-  const queryValue = filterOptionalBool(req.query.switchAnotherApplication);
-  const cookieValue = filterOptionalBool(req.cookies["switchAnotherApplication"]);
-
-  if (queryValue === false) {
-    res.setHeader("Set-Cookie", serialize("switchAnotherApplication", "", { httpOnly: true }));
-  }
-
-  if (queryValue === true || (queryValue !== false && cookieValue === true)) {
-    if (queryValue === true) {
-      res.setHeader("Set-Cookie", serialize("switchAnotherApplication", "true", { httpOnly: true }));
-    }
-    return anotherAuth0 || (
-      anotherAuth0 = initAuth0({
-        clientID: process.env.AUTH0_CLIENT_ID_ANOTHER_APPLICATION,
-        clientSecret: process.env.AUTH0_CLIENT_SECRET_ANOTHER_APPLICATION,
-      })
-    );
-  }
-
-  return defaultAuth0 || (defaultAuth0 = initAuth0({}));
 }
 
 function filterString(value: unknown): string | undefined {
@@ -53,7 +27,7 @@ async function login(req: NextApiRequest, res: NextApiResponse) {
   const organization = filterString(req.query.organization);
   const connection = organization != null ? undefined : "Username-Password-Authentication";
 
-  const auth0 = getAuth(req, res);
+  const auth0 = getAuth(req);
   await auth0.handleLogin(req, res, {
     authorizationParams: {
       invitation,
@@ -64,6 +38,6 @@ async function login(req: NextApiRequest, res: NextApiResponse) {
 };
 
 export default function auth(req: NextApiRequest, res: NextApiResponse) {
-  const auth0 = getAuth(req, res);
+  const auth0 = getAuth(req);
   return auth0.handleAuth({ login })(req, res);
 }
