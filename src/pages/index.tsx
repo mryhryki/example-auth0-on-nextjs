@@ -1,7 +1,8 @@
-import Head from "next/head";
 import styles from "@/styles/Home.module.css";
+import { getSession, withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import { GetServerSidePropsContext } from "next";
+import Head from "next/head";
 import Link from "next/link";
 
 export default function Home() {
@@ -29,4 +30,10 @@ export default function Home() {
   );
 }
 
-export const getServerSideProps = withPageAuthRequired();
+export const getServerSideProps = withPageAuthRequired({
+  getServerSideProps: async function getServerSideProps(ctx: GetServerSidePropsContext) {
+    const session = await getSession(ctx.req, ctx.res);
+    console.log("Session:", JSON.stringify(session, null, 2));
+    return { props: {} };
+  },
+});
