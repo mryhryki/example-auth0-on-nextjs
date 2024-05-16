@@ -1,11 +1,11 @@
-import styles from "@/styles/Home.module.css";
-import { getSession, withPageAuthRequired } from "@auth0/nextjs-auth0";
-import { useUser } from "@auth0/nextjs-auth0/client";
-import { GetServerSidePropsContext } from "next";
-import Head from "next/head";
-import Link from "next/link";
+import styles from '@/styles/Home.module.css'
+import { getAccessToken, getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
+import { useUser } from '@auth0/nextjs-auth0/client'
+import { GetServerSidePropsContext } from 'next'
+import Head from 'next/head'
+import Link from 'next/link'
 
-export default function Home() {
+export default function Home(props: Record<string, unknown>) {
   const { user } = useUser();
 
   return (
@@ -20,7 +20,7 @@ export default function Home() {
         <div>Logged in as <strong>{user?.email ?? "(Unknown)"}</strong></div>
         <section>
           <h2>User info</h2>
-          <pre>{JSON.stringify(user, null, 2)}</pre>
+          <pre>{JSON.stringify({ ...props, user, }, null, 2)}</pre>
         </section>
         <section>
           <Link href="/api/auth/logout">Logout</Link>
@@ -32,8 +32,21 @@ export default function Home() {
 
 export const getServerSideProps = withPageAuthRequired({
   getServerSideProps: async function getServerSideProps(ctx: GetServerSidePropsContext) {
-    const session = await getSession(ctx.req, ctx.res);
-    console.log("Session:", JSON.stringify(session, null, 2));
-    return { props: {} };
+    // const session = await getSession(ctx.req, ctx.res);
+    // console.debug("Session:", JSON.stringify(session, null, 2));
+
+    const accessToken: string = (await getAccessToken(ctx.req, ctx.res, {refresh: true})).accessToken ?? ""
+    // console.debug('Access token:', accessToken)
+
+
+    const accessTokenHash = Buffer.from(
+      await crypto.subtle.digest("SHA-256", new TextEncoder().encode(accessToken)),
+    ).toString("hex");
+
+    return {
+      props: {
+        accessTokenHash
+      },
+    }
   },
 });
