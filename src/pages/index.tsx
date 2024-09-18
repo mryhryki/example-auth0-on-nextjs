@@ -1,5 +1,4 @@
-import styles from '@/styles/Home.module.css'
-import { getAccessToken, getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
+import { getAccessToken, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import { GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
@@ -16,14 +15,13 @@ export default function Home(props: Record<string, unknown>) {
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="icon" href="/favicon.ico"/>
       </Head>
-      <main className={styles.main}>
+      <main>
         <div>Logged in as <strong>{user?.email ?? "(Unknown)"}</strong></div>
         <section>
           <h2>User info</h2>
           <pre>{JSON.stringify({ ...props, user, }, null, 2)}</pre>
         </section>
         <section>
-          <Link href="/api/auth/logout">Logout</Link>
         </section>
       </main>
     </>
@@ -50,3 +48,4 @@ export const getServerSideProps = withPageAuthRequired({
     }
   },
 });
+
