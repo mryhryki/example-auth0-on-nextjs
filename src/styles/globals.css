@@ -1,8 +1,6 @@
-:root {
-}
-
 body {
     margin: 0;
+    font-family: 'Migu 1M', sans-serif;
 }
 
 body * {
@@ -21,4 +19,15 @@ button {
 
 button:disabled {
     opacity: 0.5;
+}
+
+li, li > ul {
+    margin-top: 8px;
+}
+
+strong {
+    background-color: #ddd;
+    display: inline-block;
+    padding: 1px 4px;
+    border-radius: 4px;
 }

@@ -24,21 +24,26 @@
 .sideBar {
   border-right: 1px solid #cccccc;
   bottom: 0;
+  padding: 12px 0;
   left: 0;
   position: absolute;
   top: 48px;
-  width: 160px;
+  width: 240px;
 }
 
-.sideBarLink {
+.sideBar > a {
   display: block;
-  padding: 0.5rem 1rem;
+  padding: 8px 16px;
+}
 
+.sideBar > a:hover {
+  background: #f0f0f0;
 }
 
 .content {
   bottom: 0;
-  left: 160px;
+  left: 240px;
+  padding: 1rem;
   position: absolute;
   right: 0;
   top: 48px;
