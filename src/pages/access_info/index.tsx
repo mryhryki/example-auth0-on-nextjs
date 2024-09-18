@@ -11,6 +11,8 @@ interface AccessInfoPageProps {
   organization: {
     id: string
     name: string
+    displayName: string
+    enableSSO: boolean
   }
   accessToken: {
     hash: string;
@@ -42,12 +44,14 @@ export default function AccessInfoPage(props: AccessInfoPageProps) {
               <li>Login URL: <a href={`/api/auth/login?organization=${organization.id}`}>Login</a></li>
             </ul>
           </li>
+          <li>Display name: <strong>{organization.displayName}</strong></li>
+          <li>Enable SSO: <strong>{organization.enableSSO ? 'true' : 'false'}</strong></li>
         </ul>
       </section>
       <section>
         <h2>Access Token</h2>
         <ul>
-          <li>Hash: <strong>{accessToken.hash}</strong></li>
+        <li>Hash: <strong>{accessToken.hash}</strong></li>
           <li>Scope: <strong>{accessToken.scope}</strong></li>
           <li>Expires: <strong>{new Date(accessToken.expiresAt * 1000).toISOString()}</strong></li>
         </ul>
@@ -79,6 +83,8 @@ export const getServerSideProps = withPageAuthRequired({
       organization: {
         id: user?.org_id ?? '(No org_id)',
         name: user?.org_name ?? '(No org_name)',
+        displayName: user?.orgDisplayName ?? '(No orgDisplayName)',
+        enableSSO: user?.orgEnableSSO ?? false,
       },
       accessToken: {
         hash: accessTokenHash,
