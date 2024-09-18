@@ -1,17 +1,19 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { UserProvider, useUser } from '@auth0/nextjs-auth0/client'
-import styles from '@/pages/_app.module.css'
 import { FC } from 'react'
 import Link from 'next/link'
+import styles from '@/pages/_app.module.css'
 
 const AppHeader: FC = () => {
   const { user } = useUser()
   const email = user?.email ?? '(Unknown email)'
-  return (<div className={styles.header}>
-    <div>{email}</div>
-    <Link href="/api/auth/logout">Logout</Link>
-  </div>)
+  return (
+    <div className={styles.header}>
+      <div>{email}</div>
+      <a href="https://github.com/mryhryki/example-auth0-on-nextjs" target="_blank">GitHub</a>
+    </div>
+  )
 
 }
 
@@ -21,7 +23,8 @@ export default function App({ Component, pageProps }: AppProps) {
       <div className={styles.wrapper}>
         <AppHeader />
         <div className={styles.sideBar}>
-          <a className={styles.sideBarLink} href='/me'>My Info</a>
+          <Link href='/access_info'>Access Info</Link>
+          <Link href="/api/auth/logout">Logout</Link>
         </div>
         <div className={styles.content}>
           <Component {...pageProps} />
