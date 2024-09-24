@@ -1,4 +1,4 @@
-import { getSession } from '@auth0/nextjs-auth0'
+import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { GetServerSidePropsContext } from 'next'
 import { auth0ManagementClient } from '@/utils/auth0'
 import { OrganizationConnection } from 'auth0'
@@ -55,7 +55,6 @@ export const getServerSideProps = withPageAuthRequired({
       per_page: 100,
       include_totals: true,
     })
-    console.debug('#####', JSON.stringify({ data }, null, 2))
 
     const props: SsoPageProps = {
       organization: {
