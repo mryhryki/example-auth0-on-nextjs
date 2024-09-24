@@ -6,25 +6,19 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "auth0:import": "a0deploy import --config_file=./auth0-deploy-cli/config.json --input_file ./auth0-deploy-cli/tenant.yaml",
-    "auth0:export": "a0deploy export --config_file=./auth0-deploy-cli/config.json --output_folder ./auth0-deploy-cli/ --format=yaml"
+    "lint": "next lint"
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "3.5.0",
-    "@nestjs/passport": "10.0.3",
-    "@types/auth0": "3.3.10",
-    "@types/node": "20.12.12",
-    "@types/react": "18.3.2",
-    "@types/react-dom": "18.3.0",
-    "@types/url-join": "4.0.3",
-    "auth0": "^4.4.0",
-    "auth0-deploy-cli": "7.21.0",
-    "eslint": "8.54.0",
-    "eslint-config-next": "14.2.3",
-    "next": "14.2.12",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "typescript": "5.4.5"
+    "react": "^18",
+    "react-dom": "^18",
+    "next": "14.2.13"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.13"
   }
 }

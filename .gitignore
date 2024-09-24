@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+.yarn/install-state.gz
 
 # testing
 /coverage
@@ -25,7 +26,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*
+.env*.local
 
 # vercel
 .vercel
@@ -33,5 +34,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-auth0-deploy-cli/config.json
