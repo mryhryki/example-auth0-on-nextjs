@@ -1,7 +1,15 @@
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { GetServerSidePropsContext } from 'next'
 import { auth0ManagementClient } from '@/utils/auth0'
-import { OrganizationConnection } from 'auth0'
+
+interface OrganizationConnection {
+  connection_id: string;
+  assign_membership_on_login: boolean;
+  connection: {
+    name: string;
+    strategy: string;
+  };
+}
 
 interface SsoPageProps {
   organization: {
