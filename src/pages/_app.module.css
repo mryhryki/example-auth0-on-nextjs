@@ -36,12 +36,12 @@
   padding: 8px 16px;
 }
 
-.sideBar > a.active {
-  background-color: aliceblue;
+.sideBarLinkActive {
+  background-color: #eee;
 }
 
 .sideBar > a:hover {
-  background: #f0f0f0;
+  background: #ddd;
 }
 
 .content {
