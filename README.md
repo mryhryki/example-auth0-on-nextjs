@@ -1,40 +1,50 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# example-auth0-on-nextjs
 
-## Getting Started
+- https://nextjs.org/docs
+- https://auth0.com/docs/quickstart/webapp/nextjs
+
+## Development
 
 First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Auth0 Settings
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+### Deploy by CLI
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```shell
+$ npm run auth0:import
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Application
 
-## Learn More
+#### ID Token
 
-To learn more about Next.js, take a look at the following resources:
+- ID Token Expiration: `120` seconds
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### Refresh Token Rotation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Rotation: `ON`
+- Reuse Interval: `1` seconds
 
-## Deploy on Vercel
+#### Refresh Token Expiration
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Absolute Expiration: `ON`
+- Absolute Lifetime: `900` seconds
+- Inactivity Expiration: `ON`
+- Inactivity Lifetime: `300` seconds
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### API
+
+#### Token Settings
+
+- Token Expiration (Seconds): `90`
+
+#### Access Settings
+
+- Allow Offline Access: `ON`
