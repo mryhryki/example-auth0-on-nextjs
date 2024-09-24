@@ -3,6 +3,7 @@ import { handleAuth, handleLogin, handleCallback } from "@auth0/nextjs-auth0";
 import { NextApiRequest, NextApiResponse } from "next";
 
 // Ref: https://github.com/auth0/nextjs-auth0/issues/701#issuecomment-1255350171
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const login = async (req: NextApiRequest, res: NextApiResponse) => {
   const invitation = filterString(req.query.invitation);
