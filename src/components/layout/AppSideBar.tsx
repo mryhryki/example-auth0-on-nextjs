@@ -15,7 +15,7 @@ export const AppSideBar: FC = () => {
   return (
     <div className={styles.sideBar}>
       {Paths.map((path: string) => (
-        <Link key={path} href={path} className={path === currentPath ? 'active' : ''}>
+        <Link key={path} href={path} className={path === currentPath ? styles.sideBarLinkActive : ''}>
           {path.substring(1).split('_').map((s) => s).join(" ")}
         </Link>
       ))}
