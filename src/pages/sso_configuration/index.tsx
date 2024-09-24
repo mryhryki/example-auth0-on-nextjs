@@ -1,6 +1,7 @@
-import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
+import { getSession } from '@auth0/nextjs-auth0'
 import { GetServerSidePropsContext } from 'next'
 import { auth0ManagementClient } from '@/utils/auth0'
+import { OrganizationConnection } from 'auth0'
 
 interface SsoPageProps {
   organization: {
@@ -9,16 +10,27 @@ interface SsoPageProps {
     displayName: string
     enableSSO: boolean
   }
+  connections: OrganizationConnection[]
 }
 
 export default function SsoPage(props: SsoPageProps) {
-  const { id, displayName, enableSSO } = props.organization
+  const { organization, connections } = props
+  const { id, displayName, enableSSO } = organization
 
   return (
     <section>
       <h1>SSO Configuration</h1>
       {enableSSO ? (
-        <section>TODO</section>
+        <ol>
+          {connections.map((connection) => {
+            const { connection_id: id, connection: { name, strategy } } = connection
+            return (
+              <li key={id}>
+                <strong>{strategy}: {name}</strong> (ID: <strong>{id}</strong>)
+              </li>
+            )
+          })}
+        </ol>
       ) : (
         <p>
           <strong>{displayName}</strong> (ID: <strong>{id}</strong>) organization is not enabled SSO.
@@ -37,13 +49,13 @@ export const getServerSideProps = withPageAuthRequired({
     const orgId = user?.org_id ?? '(No org_id)'
     const enableSSO = user?.orgEnableSSO ?? false
 
-    const connections = await auth0ManagementClient.organizations.getEnabledConnections({
+    const { data } = await auth0ManagementClient.organizations.getEnabledConnections({
       id: orgId,
       page: 0,
       per_page: 100,
       include_totals: true,
     })
-    console.debug('#####', JSON.stringify({ connections }, null, 2));
+    console.debug('#####', JSON.stringify({ data }, null, 2))
 
     const props: SsoPageProps = {
       organization: {
@@ -52,6 +64,7 @@ export const getServerSideProps = withPageAuthRequired({
         displayName: user?.orgDisplayName ?? '(No orgDisplayName)',
         enableSSO,
       },
+      connections: data.enabled_connections,
     }
     return { props }
   },
