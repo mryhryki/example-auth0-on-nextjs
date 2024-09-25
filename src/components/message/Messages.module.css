@@ -1,0 +1,51 @@
+.container {
+  bottom: 1rem;
+  max-height: 50vh;
+  max-width: 50vw;
+  overflow: hidden;
+  position: fixed;
+  right: 1rem;
+}
+
+@keyframes blinkEffect {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.messageContainer {
+  align-items: center;
+  animation: blinkEffect 1s linear infinite;
+  border-radius: 4px;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  margin: 0.5rem 0 0 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 0.5rem 1rem;
+}
+
+.infoContainer {
+  background-color: #007bff;
+}
+
+.errorContainer {
+  background-color: #cc0000;
+}
+
+.message {
+  overflow-wrap: anywhere;
+}
+
+.messageClose {
+  background: none;
+  margin: 0 0 0 1rem;
+  padding: 0;
+}
