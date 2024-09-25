@@ -2,6 +2,7 @@ import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { GetServerSidePropsContext } from 'next'
 import { auth0ManagementClient } from '@/utils/auth0'
 import { useEffect } from 'react'
+import { ErrorMessages } from '@/components/error/ErrorMessages'
 
 interface SsoConfigurationNewPageProps {
   organization: {
@@ -39,6 +40,7 @@ export default function SsoPage(props: SsoConfigurationNewPageProps) {
           <input type="file" />
         </label>
       </form>
+      <ErrorMessages  messages={[/* TODO */]}/>
     </section>
   )
 }
