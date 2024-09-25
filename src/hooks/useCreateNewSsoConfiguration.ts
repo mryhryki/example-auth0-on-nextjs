@@ -3,7 +3,7 @@ import { AddErrorMessage } from '@/hooks/useErrorMessages'
 
 interface FormValues {
   type: string
-  name: string
+  displayName: string
   signInUrl: string
   x509SigningCert: File | null
 }
@@ -22,27 +22,25 @@ interface UseCreateNewSsoConfigurationState {
 export const useCreateNewSsoConfiguration = (args: UseCreateNewSsoConfigurationArgs): UseCreateNewSsoConfigurationState => {
   const [values, setValues] = useState<FormValues>({
     type: 'samlp',
-    name: '',
+    displayName: '',
     signInUrl: '',
     x509SigningCert: null,
   })
 
-  const canSubmit: boolean = values.name !== '' && values.signInUrl !== '' && values.x509SigningCert !== null
+  const canSubmit: boolean = values.displayName !== '' && values.signInUrl !== '' && values.x509SigningCert !== null
   const onSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     if (!canSubmit) return
 
-    const { type, name, signInUrl, x509SigningCert } = values
+    const { type, signInUrl, x509SigningCert } = values
     if (x509SigningCert == null) return
-
-    const formData = new FormData()
-    formData.append('name', name)
-    formData.append('signInUrl', signInUrl)
-    formData.append('x509SigningCert', x509SigningCert)
 
     const response = await fetch(`/api/sso_configuration/${type}`, {
       method: 'POST',
-      body: formData,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify({ signInUrl, x509SigningCert: await x509SigningCert.text() }),
     })
     if (!response.ok) {
       const { status } = response
