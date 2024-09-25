@@ -62,7 +62,7 @@ export default function UsersPage(props: UsersPageProps) {
             <li key={invitation.id}>
               <strong>{invitation.invitee.email}</strong>
               <ul>
-                <li>Connection: <strong>{invitation.connection_id}</strong></li>
+                <li>Connection: <strong>{invitation.connection_id ?? '(No connection)'}</strong></li>
                 <li>Created: <strong>{invitation.created_at}</strong></li>
                 <li>Expires: <strong>{invitation.expires_at}</strong></li>
               </ul>
