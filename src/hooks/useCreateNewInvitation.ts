@@ -24,14 +24,14 @@ export const useCreateNewInvitation = (args: UseCreateNewInvitationArgs): UseCre
   const onSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     if (!canSubmit) return
-    const { email } = values
+    const { connectionId, email } = values
 
     const response = await fetch(`/api/invitation/new`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ connectionId, email }),
     })
     if (response.ok) {
       const body = await response.text()
