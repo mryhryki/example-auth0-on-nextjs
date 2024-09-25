@@ -38,10 +38,6 @@ export default function SsoPage(props: SsoConfigurationNewPageProps) {
           <div>X509 Signing Certificate</div>
           <input type="file" />
         </label>
-        <label>
-          <div>Sign Out URL (Optional)</div>
-          <input type="text" />
-        </label>
       </form>
     </section>
   )
