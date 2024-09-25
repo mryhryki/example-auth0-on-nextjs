@@ -1,29 +1,37 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { withApiAuthRequired } from '@auth0/nextjs-auth0'
+import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0'
 import { auth0ManagementClient } from '@/utils/auth0'
+
+const OrgIdPrefix = 'org_'
 
 export default withApiAuthRequired(async (
   req: NextApiRequest,
   res: NextApiResponse<unknown | { error: unknown }>,
 ) => {
   try {
-    const { displayName, signInUrl, x509SigningCert } = req.body
-    const date = new Date().toISOString().substring(0, 10).replace(/-/g, '')
-    const uuid = crypto.randomUUID().replace(/-/g, '')
-    const connectionName = `${date}-${uuid}`
+    const session = await getSession(req, res)
+    const { user } = session ?? {}
+    const orgId = user?.org_id
 
-    const { data: { id: connectionId } } = await auth0ManagementClient.connections.create({
+    if (typeof orgId !== 'string' || !orgId.trim().startsWith(OrgIdPrefix)) {
+      throw new Error('org_id is invalid')
+    }
+
+    const { name, signInUrl, x509SigningCert } = req.body
+
+    const { data: { id: connectionId, name: connectionName } } = await auth0ManagementClient.connections.create({
       strategy: 'samlp',
-      name: connectionName,
-      display_name: displayName,
+      name: `${orgId.substring(OrgIdPrefix.length)}-${name}`,
       options: {
         signInEndpoint: signInUrl,
         signingCert: x509SigningCert,
-      },
-      metadata: {},
+      }
     })
 
-    // TODO Link organization
+    await auth0ManagementClient.organizations.addEnabledConnection({ id: orgId }, {
+      connection_id: connectionId,
+      assign_membership_on_login: false,
+    })
 
     res.status(200).json({ success: true, payload: { connectionId, connectionName } })
   } catch (err) {
