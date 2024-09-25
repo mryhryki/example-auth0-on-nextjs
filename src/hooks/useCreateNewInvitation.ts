@@ -2,6 +2,7 @@ import { Dispatch, FormEvent, SetStateAction, useState } from 'react'
 import { AddMessage } from '@/hooks/useMessages'
 
 interface FormValues {
+  connectionId: string;
   email: string
 }
 
@@ -17,7 +18,7 @@ interface UseCreateNewInvitationState {
 }
 
 export const useCreateNewInvitation = (args: UseCreateNewInvitationArgs): UseCreateNewInvitationState => {
-  const [values, setValues] = useState<FormValues>({ email: '' })
+  const [values, setValues] = useState<FormValues>({ connectionId: '', email: '' })
 
   const canSubmit: boolean = values.email.trim().length > 0 && values.email.includes('@')
   const onSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
