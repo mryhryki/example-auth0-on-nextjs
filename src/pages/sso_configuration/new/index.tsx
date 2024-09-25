@@ -1,8 +1,8 @@
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { GetServerSidePropsContext } from 'next'
-import { auth0ManagementClient } from '@/utils/auth0'
-import { useEffect } from 'react'
 import { ErrorMessages } from '@/components/error/ErrorMessages'
+import { useCreateNewSsoConfiguration } from '@/hooks/useCreateNewSsoConfiguration'
+import { useErrorMessages } from '@/hooks/useErrorMessages'
 
 interface SsoConfigurationNewPageProps {
   organization: {
@@ -17,30 +17,48 @@ export default function SsoPage(props: SsoConfigurationNewPageProps) {
   const { organization } = props
   const { displayName, name } = organization
 
+  const { errorMessages, removeErrorMessage, addErrorMessage } = useErrorMessages()
+  const { values, setValues, canSubmit, onSubmit } = useCreateNewSsoConfiguration({ addErrorMessage })
+
   return (
     <section>
       <h1>Create NEW SSO Configuration for <strong>{displayName}</strong> (Name: <strong>{name}</strong>)</h1>
-      <form>
+      <form onSubmit={onSubmit}>
         <label>
           <div>Type</div>
-          <select>
+          <select
+            value={values.type}
+            onChange={(event) => setValues((prev) => ({ ...prev, type: event.target.value }))}
+          >
             <option value="saml">SAML</option>
           </select>
         </label>
         <label>
           <div>Name</div>
-          <input type="text" />
+          <input
+            type="text"
+            value={values.name}
+            onChange={(event) => setValues((prev) => ({ ...prev, name: event.target.value }))}
+          />
         </label>
         <label>
           <div>Sign In URL</div>
-          <input type="text" />
+          <input
+            type="text"
+            value={values.signInUrl}
+            onChange={(event) => setValues((prev) => ({ ...prev, signInUrl: event.target.value }))}
+          />
         </label>
         <label>
           <div>X509 Signing Certificate</div>
-          <input type="file" />
+          <input
+            type="file"
+            onChange={(event) => setValues((prev) => ({ ...prev, x509SigningCert: event.target.files?.[0] ?? null }))}
+          />
         </label>
+        <input type="submit" value="Create" disabled={!canSubmit} />
       </form>
-      <ErrorMessages  messages={[/* TODO */]}/>
+      <ErrorMessages errorMessages={errorMessages} removeErrorMessage={removeErrorMessage} />
     </section>
   )
 }
