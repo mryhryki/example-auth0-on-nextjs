@@ -12,7 +12,7 @@ interface OrganizationConnection {
   };
 }
 
-interface SsoPageProps {
+interface SsoConfigurationIndexPageProps {
   organization: {
     id: string
     name: string
@@ -22,14 +22,14 @@ interface SsoPageProps {
   connections: OrganizationConnection[]
 }
 
-export default function SsoPage(props: SsoPageProps) {
+export default function SsoConfigurationIndexPage(props: SsoConfigurationIndexPageProps) {
   const { organization, connections } = props
   const { displayName, enableSSO } = organization
   const orgIdWithoutPrefix = organization.id.substring('org_'.length)
 
   return (
     <section>
-      <h1>SSO Configuration</h1>
+      <h1>SSO Configurations</h1>
       {enableSSO ? (
         <>
           <ol>
@@ -37,10 +37,10 @@ export default function SsoPage(props: SsoPageProps) {
               const { connection_id: id, connection: { name, strategy } } = connection
               return (
                 <li key={id}>
-                  <strong>{strategy}: {name.replace(
+                  <Link href={`/sso_configuration/${id}`}>{strategy}: {name.replace(
                     new RegExp(`^${orgIdWithoutPrefix}-`),
                     '',
-                  )}</strong> (ID: <strong>{id}</strong>)
+                  )}</Link>
                 </li>
               )
             })}
@@ -72,7 +72,7 @@ export const getServerSideProps = withPageAuthRequired({
       include_totals: true,
     })
 
-    const props: SsoPageProps = {
+    const props: SsoConfigurationIndexPageProps = {
       organization: {
         id: orgId,
         name: user?.org_name ?? '(No org_name)',
