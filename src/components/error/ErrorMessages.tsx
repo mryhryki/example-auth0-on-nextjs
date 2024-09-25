@@ -19,7 +19,7 @@ export const ErrorMessages: FC<ErrorMessagesProps> = (props) => {
       {errorMessages.map(({ id, message }) => {
         return (
           <div className={styles.messageContainer} key={id}>
-            <span>{message}</span>
+            <span className={styles.message}>{message}</span>
             <button className={styles.messageClose} onClick={() => removeErrorMessage(id)}>Remove</button>
           </div>
         )
