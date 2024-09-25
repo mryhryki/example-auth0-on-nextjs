@@ -34,11 +34,11 @@ export default function SsoPage(props: SsoConfigurationNewPageProps) {
           </select>
         </label>
         <label>
-          <div>Display Name</div>
+          <div>Name {'(Pattern: "^[a-zA-Z0-9](-[a-zA-Z0-9]|[a-zA-Z0-9])*")'}</div>
           <input
             type="text"
-            value={values.displayName}
-            onChange={(event) => setValues((prev) => ({ ...prev, displayName: event.target.value }))}
+            value={values.name}
+            onChange={(event) => setValues((prev) => ({ ...prev, name: event.target.value }))}
           />
         </label>
         <label>
