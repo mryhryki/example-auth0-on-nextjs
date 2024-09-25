@@ -30,7 +30,7 @@ export default function SsoPage(props: SsoConfigurationNewPageProps) {
             value={values.type}
             onChange={(event) => setValues((prev) => ({ ...prev, type: event.target.value }))}
           >
-            <option value="saml">SAML</option>
+            <option value="samlp">SAML</option>
           </select>
         </label>
         <label>
