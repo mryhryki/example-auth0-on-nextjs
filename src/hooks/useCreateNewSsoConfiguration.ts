@@ -3,7 +3,7 @@ import { AddMessage } from '@/hooks/useMessages'
 
 interface FormValues {
   type: string
-  displayName: string
+  name: string
   signInUrl: string
   x509SigningCert: File | null
 }
@@ -19,20 +19,22 @@ interface UseCreateNewSsoConfigurationState {
   values: FormValues
 }
 
+const NamePattern = new RegExp('^[a-zA-Z0-9](-[a-zA-Z0-9]|[a-zA-Z0-9])*')
+
 export const useCreateNewSsoConfiguration = (args: UseCreateNewSsoConfigurationArgs): UseCreateNewSsoConfigurationState => {
   const [values, setValues] = useState<FormValues>({
     type: 'samlp',
-    displayName: '',
+    name: '',
     signInUrl: '',
     x509SigningCert: null,
   })
 
-  const canSubmit: boolean = values.displayName !== '' && values.signInUrl !== '' && values.x509SigningCert !== null
+  const canSubmit: boolean = NamePattern.test(values.name) && values.signInUrl !== '' && values.x509SigningCert !== null
   const onSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     if (!canSubmit) return
 
-    const { type, signInUrl, x509SigningCert } = values
+    const { type, name, signInUrl, x509SigningCert } = values
     if (x509SigningCert == null) return
 
     const response = await fetch(`/api/sso_configuration/${type}`, {
@@ -40,7 +42,7 @@ export const useCreateNewSsoConfiguration = (args: UseCreateNewSsoConfigurationA
       headers: {
         "Content-Type": "application/json; charset=utf-8",
       },
-      body: JSON.stringify({ signInUrl, x509SigningCert: await x509SigningCert.text() }),
+      body: JSON.stringify({ name, signInUrl, x509SigningCert: await x509SigningCert.text() }),
     })
     if (response.ok) {
       const body = await response.text()
