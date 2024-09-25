@@ -34,11 +34,11 @@ export default function SsoPage(props: SsoConfigurationNewPageProps) {
           </select>
         </label>
         <label>
-          <div>Name</div>
+          <div>Display Name</div>
           <input
             type="text"
-            value={values.name}
-            onChange={(event) => setValues((prev) => ({ ...prev, name: event.target.value }))}
+            value={values.displayName}
+            onChange={(event) => setValues((prev) => ({ ...prev, displayName: event.target.value }))}
           />
         </label>
         <label>
