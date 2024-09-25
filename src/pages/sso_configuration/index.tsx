@@ -25,6 +25,7 @@ interface SsoPageProps {
 export default function SsoPage(props: SsoPageProps) {
   const { organization, connections } = props
   const { displayName, enableSSO } = organization
+  const orgIdWithoutPrefix = organization.id.substring('org_'.length)
 
   return (
     <section>
@@ -36,7 +37,10 @@ export default function SsoPage(props: SsoPageProps) {
               const { connection_id: id, connection: { name, strategy } } = connection
               return (
                 <li key={id}>
-                  <strong>{strategy}: {name}</strong> (Name: <strong>{id}</strong>)
+                  <strong>{strategy}: {name.replace(
+                    new RegExp(`^${orgIdWithoutPrefix}-`),
+                    '',
+                  )}</strong> (ID: <strong>{id}</strong>)
                 </li>
               )
             })}
