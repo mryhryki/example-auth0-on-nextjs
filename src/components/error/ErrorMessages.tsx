@@ -17,10 +17,9 @@ export const ErrorMessages: FC<ErrorMessagesProps> = (props) => {
   return (
     <div className={styles.container}>
       {errorMessages.map(({ id, message }) => {
-        const ellipsisMessage = message.length > 100 ? `${message.slice(0, 100)}...` : message
         return (
           <div className={styles.messageContainer} key={id}>
-            <span>{ellipsisMessage}</span>
+            <span>{message}</span>
             <button className={styles.messageClose} onClick={() => removeErrorMessage(id)}>Remove</button>
           </div>
         )
