@@ -1,0 +1,28 @@
+.container {
+  bottom: 1rem;
+  max-height: 50vh;
+  max-width: 50vw;
+  overflow: hidden;
+  position: fixed;
+  right: 1rem;
+}
+
+@keyframes blinkEffect {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+.message {
+  animation: blinkEffect 1s infinite;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  background-color: #cc0000;
+  color: white;
+}
