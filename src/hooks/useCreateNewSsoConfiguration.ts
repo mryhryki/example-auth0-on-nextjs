@@ -1,5 +1,5 @@
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react'
-import { AddErrorMessage } from '@/hooks/useErrorMessages'
+import { AddMessage } from '@/hooks/useMessages'
 
 interface FormValues {
   type: string
@@ -9,7 +9,7 @@ interface FormValues {
 }
 
 interface UseCreateNewSsoConfigurationArgs {
-  addErrorMessage: AddErrorMessage
+  addMessage: AddMessage;
 }
 
 interface UseCreateNewSsoConfigurationState {
@@ -42,11 +42,14 @@ export const useCreateNewSsoConfiguration = (args: UseCreateNewSsoConfigurationA
       },
       body: JSON.stringify({ signInUrl, x509SigningCert: await x509SigningCert.text() }),
     })
-    if (!response.ok) {
+    if (response.ok) {
+      const body = await response.text()
+      args.addMessage('info', `SSO configuration created successfully: ${body}`)
+    } else {
       const { status } = response
       const body = await response.text()
       const errorMessage = `Failed to create SSO configuration: ${status} ${body}`
-      args.addErrorMessage(errorMessage)
+      args.addMessage('error', errorMessage)
     }
   }
 
