@@ -24,7 +24,9 @@ interface OrganizationInvitation {
   expires_at: string;
   connection_id?: string | undefined;
   client_id: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   app_metadata?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   user_metadata?: any;
   ticket_id: string;
   roles?: string[] | undefined;
@@ -59,7 +61,11 @@ export default function UsersPage(props: UsersPageProps) {
           {invitations.map((invitation) => (
             <li key={invitation.id}>
               <strong>{invitation.invitee.email}</strong>
-              (Created: {invitation.created_at}, Expires: {invitation.expires_at})
+              <ul>
+                <li>Connection: <strong>{invitation.connection_id}</strong></li>
+                <li>Created: <strong>{invitation.created_at}</strong></li>
+                <li>Expires: <strong>{invitation.expires_at}</strong></li>
+              </ul>
             </li>
           ))}
         </ol>
