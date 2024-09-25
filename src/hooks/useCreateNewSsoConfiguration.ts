@@ -21,7 +21,7 @@ interface UseCreateNewSsoConfigurationState {
 
 export const useCreateNewSsoConfiguration = (args: UseCreateNewSsoConfigurationArgs): UseCreateNewSsoConfigurationState => {
   const [values, setValues] = useState<FormValues>({
-    type: 'saml',
+    type: 'samlp',
     name: '',
     signInUrl: '',
     x509SigningCert: null,
@@ -36,12 +36,11 @@ export const useCreateNewSsoConfiguration = (args: UseCreateNewSsoConfigurationA
     if (x509SigningCert == null) return
 
     const formData = new FormData()
-    formData.append('type', type)
     formData.append('name', name)
     formData.append('signInUrl', signInUrl)
     formData.append('x509SigningCert', x509SigningCert)
 
-    const response = await fetch('/api/sso_configuration', {
+    const response = await fetch(`/api/sso_configuration/${type}`, {
       method: 'POST',
       body: formData,
     })
