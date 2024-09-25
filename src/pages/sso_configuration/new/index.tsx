@@ -1,8 +1,8 @@
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { GetServerSidePropsContext } from 'next'
-import { ErrorMessages } from '@/components/error/ErrorMessages'
+import { Messages } from '@/components/message/Messages'
 import { useCreateNewSsoConfiguration } from '@/hooks/useCreateNewSsoConfiguration'
-import { useErrorMessages } from '@/hooks/useErrorMessages'
+import { useMessages } from '@/hooks/useMessages'
 
 interface SsoConfigurationNewPageProps {
   organization: {
@@ -17,8 +17,8 @@ export default function SsoPage(props: SsoConfigurationNewPageProps) {
   const { organization } = props
   const { displayName, name } = organization
 
-  const { errorMessages, removeErrorMessage, addErrorMessage } = useErrorMessages()
-  const { values, setValues, canSubmit, onSubmit } = useCreateNewSsoConfiguration({ addErrorMessage })
+  const { errorMessages, removeMessage, addMessage } = useMessages()
+  const { values, setValues, canSubmit, onSubmit } = useCreateNewSsoConfiguration({ addMessage })
 
   return (
     <section>
@@ -58,7 +58,7 @@ export default function SsoPage(props: SsoConfigurationNewPageProps) {
         </label>
         <input type="submit" value="Create" disabled={!canSubmit} />
       </form>
-      <ErrorMessages errorMessages={errorMessages} removeErrorMessage={removeErrorMessage} />
+      <Messages errorMessages={errorMessages} removeMessage={removeMessage} />
     </section>
   )
 }
