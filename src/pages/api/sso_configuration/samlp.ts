@@ -9,18 +9,23 @@ export default withApiAuthRequired(async (
   try {
     const { displayName, signInUrl, x509SigningCert } = req.body
     const date = new Date().toISOString().substring(0, 10).replace(/-/g, '')
-    const uuid = crypto.randomUUID()
+    const uuid = crypto.randomUUID().replace(/-/g, '')
+    const connectionName = `${date}-${uuid}`
 
-    const response = await auth0ManagementClient.connections.create({
+    const { data: { id: connectionId } } = await auth0ManagementClient.connections.create({
       strategy: 'samlp',
-      name: `${date}-${uuid}`,
+      name: connectionName,
       display_name: displayName,
       options: {
         signInEndpoint: signInUrl,
         signingCert: x509SigningCert,
       },
+      metadata: {},
     })
-    res.status(200).json({ success: true, payload: response.data })
+
+    // TODO Link organization
+
+    res.status(200).json({ success: true, payload: { connectionId, connectionName } })
   } catch (err) {
     console.error('ERROR:', err)
     res.status(500).json({ success: false, error: err })
