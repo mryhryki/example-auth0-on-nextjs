@@ -23,7 +23,7 @@ interface SsoPageProps {
 
 export default function SsoPage(props: SsoPageProps) {
   const { organization, connections } = props
-  const { id, displayName, enableSSO } = organization
+  const { displayName, enableSSO } = organization
 
   return (
     <section>
@@ -34,14 +34,14 @@ export default function SsoPage(props: SsoPageProps) {
             const { connection_id: id, connection: { name, strategy } } = connection
             return (
               <li key={id}>
-                <strong>{strategy}: {name}</strong> (ID: <strong>{id}</strong>)
+                <strong>{strategy}: {name}</strong> (Name: <strong>{id}</strong>)
               </li>
             )
           })}
         </ol>
       ) : (
         <p>
-          <strong>{displayName}</strong> (ID: <strong>{id}</strong>) organization is not enabled SSO.
+          <strong>{displayName}</strong> (Name: <strong>{organization.name}</strong>) organization is not enabled SSO.
         </p>
       )}
     </section>
