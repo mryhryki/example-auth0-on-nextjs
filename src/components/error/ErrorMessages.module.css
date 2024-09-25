@@ -9,20 +9,30 @@
 
 @keyframes blinkEffect {
   0% {
-    opacity: 0.2;
+    opacity: 0.5;
   }
   50% {
     opacity: 1;
   }
   100% {
-    opacity: 0.2;
+    opacity: 0.5;
   }
 }
 
-.message {
-  animation: blinkEffect 1s infinite;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+.messageContainer {
+  align-items: center;
+  animation: blinkEffect 1s linear infinite;
   background-color: #cc0000;
+  border-radius: 4px;
   color: white;
+  display: flex;
+  flex-direction: row;
+  margin: 0.5rem 0 0 0;
+  padding: 0.5rem 1rem;
+}
+
+.messageClose {
+  background: none;
+  margin: 0 0 0 1rem;
+  padding: 0;
 }
