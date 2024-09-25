@@ -1,6 +1,7 @@
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { GetServerSidePropsContext } from 'next'
 import { auth0ManagementClient } from '@/utils/auth0'
+import Link from 'next/link'
 
 interface OrganizationConnection {
   connection_id: string;
@@ -29,16 +30,19 @@ export default function SsoPage(props: SsoPageProps) {
     <section>
       <h1>SSO Configuration</h1>
       {enableSSO ? (
-        <ol>
-          {connections.map((connection) => {
-            const { connection_id: id, connection: { name, strategy } } = connection
-            return (
-              <li key={id}>
-                <strong>{strategy}: {name}</strong> (Name: <strong>{id}</strong>)
-              </li>
-            )
-          })}
-        </ol>
+        <>
+          <ol>
+            {connections.map((connection) => {
+              const { connection_id: id, connection: { name, strategy } } = connection
+              return (
+                <li key={id}>
+                  <strong>{strategy}: {name}</strong> (Name: <strong>{id}</strong>)
+                </li>
+              )
+            })}
+          </ol>
+          <Link href="/sso_configuration/new">Add new configuration</Link>
+        </>
       ) : (
         <p>
           <strong>{displayName}</strong> (Name: <strong>{organization.name}</strong>) organization is not enabled SSO.
