@@ -8,7 +8,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 const login = async (req: NextApiRequest, res: NextApiResponse) => {
   const invitation = filterString(req.query.invitation);
   const organization = filterString(req.query.organization);
-  const connection = organization != null ? undefined : "Username-Password-Authentication";
+  const connection = organization != null ? filterString(req.query.connection) : "Username-Password-Authentication";
 
   await handleLogin(req, res, {
     authorizationParams: {
