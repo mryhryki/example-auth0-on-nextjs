@@ -1,16 +1,12 @@
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react'
-import { AddMessage } from '@/hooks/useMessages'
 import { fetchApi } from '@/utils/api'
+import { AppMessage } from '@/components/message/AppMessage'
 
 interface FormValues {
   type: string
   name: string
   signInUrl: string
   x509SigningCert: File | null
-}
-
-interface UseCreateNewSsoConfigurationArgs {
-  addMessage: AddMessage;
 }
 
 interface UseCreateNewSsoConfigurationState {
@@ -22,7 +18,7 @@ interface UseCreateNewSsoConfigurationState {
 
 const NamePattern = new RegExp('^[a-zA-Z0-9](-[a-zA-Z0-9]|[a-zA-Z0-9])*')
 
-export const useCreateNewSsoConfiguration = (args: UseCreateNewSsoConfigurationArgs): UseCreateNewSsoConfigurationState => {
+export const useCreateNewSsoConfiguration = (): UseCreateNewSsoConfigurationState => {
   const [values, setValues] = useState<FormValues>({
     type: 'samlp',
     name: '',
@@ -35,15 +31,18 @@ export const useCreateNewSsoConfiguration = (args: UseCreateNewSsoConfigurationA
     event.preventDefault()
     if (!canSubmit) return
 
-    const { type, name, signInUrl, x509SigningCert } = values
-    if (x509SigningCert == null) return
-
-    const response = await fetchApi(
-      'POST',
-      `/auth0/connections/create/${type}`,
-      { name, signInUrl, x509SigningCert: await x509SigningCert.text() },
-    )
-    args.addMessage('info', `SSO configuration created successfully: ${JSON.stringify(response)}`)
+    try {
+     const { type, name, signInUrl, x509SigningCert } = values
+     if (x509SigningCert == null) return
+      const response = await fetchApi(
+        'POST',
+        `/auth0/user_management_api_v2/connections/create/${type}`,
+        { name, signInUrl, x509SigningCert: await x509SigningCert.text() },
+      )
+      AppMessage.addInfoMessage(`SSO configuration created successfully: ${JSON.stringify(response)}`)
+    } catch (err) {
+      AppMessage.addErrorMessage(`Failed to create SSO configuration: ${err}`)
+    }
   }
 
   return {
