@@ -19,11 +19,7 @@ export default function AccessInfoPage(props: Auth0Session) {
         <h2>Organization</h2>
         <ul>
           <li>ID: <strong>{organization.orgId}</strong></li>
-          <li>Name: <strong>{organization.orgName}</strong>
-            <ul>
-              <li>Login URL: <a href={`/api/auth/login?organization=${organization.orgId}`}>Login</a></li>
-            </ul>
-          </li>
+          <li>Name: <strong>{organization.orgName}</strong></li>
           <li>Display name: <strong>{organization.displayName}</strong></li>
           <li>Enable SSO: <strong>{organization.enableSSO ? 'true' : 'false'}</strong></li>
         </ul>
