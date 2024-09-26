@@ -4,6 +4,7 @@ import { Auth0Session, getServerSidePropsForSession } from '@/utils/session'
 import { useOrganizationConnections } from '@/hooks/useOrganizationConnections'
 import { Loading } from '@/components/loading/Loading'
 import { useOrganization } from '@/hooks/useOrganization'
+import { useOrganizationUpdate } from '@/hooks/useOrganizationUpdate'
 
 export default function SsoConfigurationIndexPage(props: Auth0Session) {
   const { organization } = props
@@ -11,8 +12,8 @@ export default function SsoConfigurationIndexPage(props: Auth0Session) {
 
   const baseUrl = `/api/auth/login?organization=${orgId}`
   const { connections, loading: loadingOrganizationConnections } = useOrganizationConnections()
-  const { loading: loadingOrganization, restrictedConnectionIds } = useOrganization()
-  console.debug('#####', JSON.stringify({ restrictedConnectionIds }, null, 2))
+  const { loading: loadingOrganization, restrictedConnectionIds, reload } = useOrganization()
+  const { loading: loadingOrganizationUpdate, updateOrganization } = useOrganizationUpdate()
 
   return (
     <section>
@@ -41,21 +42,44 @@ export default function SsoConfigurationIndexPage(props: Auth0Session) {
                 const { connection_id: id, connection: { name, strategy } } = connection
                 const nameWithoutPrefix = name.replace(new RegExp(`^${orgIdWithoutPrefix}-`), '')
                 const loginUrl = `${baseUrl}&connection=${name}`
-                const restricted: boolean = restrictedConnectionIds.includes(id)
+                const restricted = restrictedConnectionIds.includes(id)
                 return (
                   <li key={id}>
                     <strong>{nameWithoutPrefix}</strong>
                     <ul>
                       <li>ID: <strong>{id}</strong></li>
                       <li>Strategy: <strong>{strategy}</strong></li>
-                      <li>Login URL:
-                        {loadingOrganization ?
-                          <Loading /> :
-                          restricted ? (
-                            <strong>(Restricted)</strong>
-                          ) : (
-                            <Link href={loginUrl}>{loginUrl}</Link>
-                          )}
+                      <li>Login URL:{' '}
+                        <Link
+                          href={loginUrl}
+                          style={{ textDecorationLine: restricted ? 'line-through' : undefined }}
+                        >
+                          {loginUrl}
+                        </Link>
+                      </li>
+                      <li>
+                        Restricted: {loadingOrganization ? <Loading /> :
+                        <>
+                          <strong>{restricted ? 'Yes' : 'No'}</strong>
+                          <button
+                            onClick={async () => {
+                              const newRestrictedConnectionIds = restrictedConnectionIds.filter((cid) => cid !== id)
+                              if (!restricted) {
+                                newRestrictedConnectionIds.push(id)
+                              }
+                              await updateOrganization({
+                                metadata: {
+                                  restrictedConnectionIds: JSON.stringify(newRestrictedConnectionIds),
+                                },
+                              })
+                              await reload()
+                            }}
+                            disabled={loadingOrganization || loadingOrganizationUpdate}
+                          >
+                            → {restricted ? 'Remove restrictions' : 'Set restrictions' }
+                          </button>
+                        </>
+                      }
                       </li>
                     </ul>
                   </li>
