@@ -1,4 +1,4 @@
-export const fetchApi = async<T>(method: string, path: string, payload: Record<string, unknown> = {}): Promise<T> => {
+export const fetchApi = async<T>(method: string, path: string, payload: unknown = {}): Promise<T> => {
   const body = method === 'GET' ? undefined : JSON.stringify(payload)
   const response = await fetch(`/api/${path}`, {
     method,
