@@ -4,6 +4,7 @@ import { UserProvider } from '@auth0/nextjs-auth0/client'
 import styles from '@/pages/_app.module.css'
 import { AppHeader } from '@/components/layout/AppHeader'
 import { AppSideBar } from '@/components/layout/AppSideBar'
+import { Messages } from '@/components/message/Messages'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -15,6 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </div>
       </div>
+      <Messages />
     </UserProvider>
   )
 }
