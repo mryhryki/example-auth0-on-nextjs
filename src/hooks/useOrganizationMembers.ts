@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { fetchApi } from '@/utils/api'
 import { Auth0OrganizationMember } from '@/pages/api/auth0/user_management_api_v2/organizations/get_members'
+import { AppMessage } from '@/components/message/AppMessage'
 
 interface UseOrganizationMembersState {
   members: Auth0OrganizationMember[]
@@ -16,8 +17,11 @@ export const useOrganizationMembers = (): UseOrganizationMembersState => {
       'GET',
       '/auth0/user_management_api_v2/organizations/get_members',
     ).then((data) => {
-      loading.current = false
       setMembers(data.members)
+    }).catch((err) => {
+      AppMessage.addErrorMessage(`Failed to load members: ${err}`)
+    }).finally(() => {
+      loading.current = false
     })
   }, [])
 
