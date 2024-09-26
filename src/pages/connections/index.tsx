@@ -6,8 +6,9 @@ import { Loading } from '@/components/loading/Loading'
 
 export default function SsoConfigurationIndexPage(props: Auth0Session) {
   const { organization } = props
-  const { orgIdWithoutPrefix, displayName, enableSSO } = organization
+  const { orgId, orgIdWithoutPrefix, displayName, enableSSO } = organization
 
+  const baseUrl = `/api/auth/login?organization=${orgId}`
   const { connections, loading } = useOrganizationConnections()
 
   return (
@@ -35,12 +36,15 @@ export default function SsoConfigurationIndexPage(props: Auth0Session) {
             <ol>
               {connections.map((connection) => {
                 const { connection_id: id, connection: { name, strategy } } = connection
+                const nameWithoutPrefix = name.replace(new RegExp(`^${orgIdWithoutPrefix}-`), '')
+                const loginUrl = `${baseUrl}&connection=${name}`
                 return (
                   <li key={id}>
-                    <Link href={`/connections/${id}`}>{strategy}: {name.replace(
-                      new RegExp(`^${orgIdWithoutPrefix}-`),
-                      '',
-                    )}</Link>
+                    <strong>{nameWithoutPrefix}</strong>
+                    <ul>
+                      <li>Strategy: <strong>{strategy}</strong></li>
+                      <li>Login URL: <Link href={loginUrl}>{loginUrl}</Link></li>
+                    </ul>
                   </li>
                 )
               })}
