@@ -6,7 +6,7 @@ import { useCurrentUrl } from '@/hooks/useCurrentUrl'
 const Paths: string[] = [
   '/access_info',
   '/users',
-  '/sso_configuration',
+  '/sso_configurations',
 ]
 
 export const AppSideBar: FC = () => {
