@@ -17,7 +17,7 @@ export const AppSideBar: FC = () => {
     <div className={styles.sideBar}>
       {Paths.map((path: string) => (
         <Link key={path} href={path} className={path === currentPath ? styles.sideBarLinkActive : ''}>
-          {path.substring(1).split('_').map((s) => s).join(" ")}
+          {path.substring(1).split('_').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
         </Link>
       ))}
       <Link href="/api/auth/logout">Logout</Link>
