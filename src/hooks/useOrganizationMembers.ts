@@ -1,30 +1,28 @@
-import {
-  Auth0OrganizationConnection,
-} from '@/pages/api/auth0/user_management_api_v2/organizations/get_enabled_connections'
 import { useEffect, useRef, useState } from 'react'
 import { fetchApi } from '@/utils/api'
+import { Auth0OrganizationMember } from '@/pages/api/auth0/user_management_api_v2/organizations/get_members'
 
 interface UseOrganizationMembersState {
-  users: Auth0OrganizationConnection[]
+  members: Auth0OrganizationMember[]
   loading: boolean;
 }
 
 export const useOrganizationMembers = (): UseOrganizationMembersState => {
   const loading = useRef(true)
-  const [connections, setConnections] = useState<Auth0OrganizationConnection[]>([])
+  const [members, setMembers] = useState<Auth0OrganizationMember[]>([])
 
   useEffect(() => {
-    fetchApi<{ connections: Auth0OrganizationConnection[] }>(
+    fetchApi<{ members: Auth0OrganizationMember[] }>(
       'GET',
-      '/auth0/user_management_api_v2/organizations/get_enabled_connections',
+      '/auth0/user_management_api_v2/organizations/get_members',
     ).then((data) => {
       loading.current = false
-      setConnections(data.connections)
+      setMembers(data.members)
     })
   }, [])
 
   return {
-    connections,
+    members,
     loading: loading.current,
   }
 }
