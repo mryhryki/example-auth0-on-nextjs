@@ -1,14 +1,10 @@
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react'
-import { AddMessage } from '@/hooks/useMessages'
 import { fetchApi } from '@/utils/api'
+import { AppMessage } from '@/components/message/AppMessage'
 
 interface FormValues {
   connectionId: string;
   email: string
-}
-
-interface UseCreateNewInvitationArgs {
-  addMessage: AddMessage;
 }
 
 interface UseCreateNewInvitationState {
@@ -18,7 +14,7 @@ interface UseCreateNewInvitationState {
   values: FormValues
 }
 
-export const useCreateNewInvitation = (args: UseCreateNewInvitationArgs): UseCreateNewInvitationState => {
+export const useCreateNewInvitation = (): UseCreateNewInvitationState => {
   const [values, setValues] = useState<FormValues>({ connectionId: '', email: '' })
 
   const canSubmit: boolean = values.connectionId.trim().length > 0 &&
@@ -27,14 +23,17 @@ export const useCreateNewInvitation = (args: UseCreateNewInvitationArgs): UseCre
   const onSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     if (!canSubmit) return
-    const { connectionId, email } = values
-
-    const response = await fetchApi(
-      'POST',
-      '/auth0/user_management_api_v2/organizations/create_invitation',
-      { connectionId, email },
-    )
-    args.addMessage('info', `Invitation has been created: ${JSON.stringify(response)}`)
+    try {
+      const { connectionId, email } = values
+      const response = await fetchApi(
+        'POST',
+        '/auth0/user_management_api_v2/organizations/create_invitation',
+        { connectionId, email },
+      )
+      AppMessage.addErrorMessage(`Invitation has been created: ${JSON.stringify(response)}`)
+    } catch (err) {
+      AppMessage.addErrorMessage(`Failed to create invitation: ${err}`)
+    }
   }
 
   return {
