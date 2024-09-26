@@ -1,16 +1,13 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { GetServerSidePropsContext } from 'next'
-import { Messages } from '@/components/message/Messages'
 import { useCreateNewSsoConfiguration } from '@/hooks/useCreateNewSsoConfiguration'
-import { useMessages } from '@/hooks/useMessages'
 import { Auth0Session, getAuth0Session } from '@/utils/session'
 
 export default function SsoConfigurationsNewPage(props: Auth0Session) {
   const { organization } = props
   const { displayName, orgName } = organization
 
-  const { errorMessages, removeMessage, addMessage } = useMessages()
-  const { values, setValues, canSubmit, onSubmit } = useCreateNewSsoConfiguration({ addMessage })
+  const { values, setValues, canSubmit, onSubmit } = useCreateNewSsoConfiguration()
 
   return (
     <section>
@@ -50,7 +47,6 @@ export default function SsoConfigurationsNewPage(props: Auth0Session) {
         </label>
         <input type="submit" value="Create" disabled={!canSubmit} />
       </form>
-      <Messages errorMessages={errorMessages} removeMessage={removeMessage} />
     </section>
   )
 }
