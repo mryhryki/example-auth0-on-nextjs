@@ -3,13 +3,16 @@ import Link from 'next/link'
 import { Auth0Session, getServerSidePropsForSession } from '@/utils/session'
 import { useOrganizationConnections } from '@/hooks/useOrganizationConnections'
 import { Loading } from '@/components/loading/Loading'
+import { useOrganization } from '@/hooks/useOrganization'
 
 export default function SsoConfigurationIndexPage(props: Auth0Session) {
   const { organization } = props
   const { orgId, orgIdWithoutPrefix, displayName, enableSSO } = organization
 
   const baseUrl = `/api/auth/login?organization=${orgId}`
-  const { connections, loading } = useOrganizationConnections()
+  const { connections, loading: loadingOrganizationConnections } = useOrganizationConnections()
+  const { organization: allOrganizationInfo, loading: loadingOrganization, restrictedConnectionIds } = useOrganization()
+  console.debug('#####', JSON.stringify({ restrictedConnectionIds }, null, 2))
 
   return (
     <section>
@@ -22,7 +25,7 @@ export default function SsoConfigurationIndexPage(props: Auth0Session) {
             </p>
           )
         }
-        if (loading) {
+        if (loadingOrganizationConnections) {
           return (
             <>
               <Link href="/connections/new">Add new configuration</Link>
@@ -42,8 +45,16 @@ export default function SsoConfigurationIndexPage(props: Auth0Session) {
                   <li key={id}>
                     <strong>{nameWithoutPrefix}</strong>
                     <ul>
+                      <li>ID: <strong>{id}</strong></li>
                       <li>Strategy: <strong>{strategy}</strong></li>
                       <li>Login URL: <Link href={loginUrl}>{loginUrl}</Link></li>
+                      <li>
+                        Restricted: {loadingOrganization ? <Loading /> : (
+                        <strong>
+                          {restrictedConnectionIds.includes(id) ? 'Yes' : 'No'}
+                        </strong>
+                      )}
+                      </li>
                     </ul>
                   </li>
                 )
