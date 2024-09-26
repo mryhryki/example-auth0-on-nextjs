@@ -22,10 +22,16 @@ export default function SsoConfigurationIndexPage(props: Auth0Session) {
           )
         }
         if (loading) {
-          return <Loading />
+          return (
+            <>
+              <Link href="/sso_configurations/new">Add new configuration</Link>
+              <Loading />
+            </>
+          )
         }
         return (
           <>
+            <Link href="/sso_configurations/new">Add new configuration</Link>
             <ol>
               {connections.map((connection) => {
                 const { connection_id: id, connection: { name, strategy } } = connection
@@ -39,7 +45,6 @@ export default function SsoConfigurationIndexPage(props: Auth0Session) {
                 )
               })}
             </ol>
-            <Link href="/sso_configurations/new">Add new configuration</Link>
           </>
         )
       })()}
