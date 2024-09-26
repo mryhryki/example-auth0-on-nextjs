@@ -37,7 +37,7 @@ export const useCreateNewSsoConfiguration = (args: UseCreateNewSsoConfigurationA
     const { type, name, signInUrl, x509SigningCert } = values
     if (x509SigningCert == null) return
 
-    const response = await fetch(`/api/sso_configuration/${type}`, {
+    const response = await fetch(`/api/auth0/configurations/create/${type}`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json; charset=utf-8",
