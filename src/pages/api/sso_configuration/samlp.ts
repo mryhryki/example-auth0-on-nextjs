@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0'
-import { auth0ManagementClient } from '@/utils/auth0'
+import { auth0ManagementClient } from '@/utils/auth0/client'
 
 const OrgIdPrefix = 'org_'
 
