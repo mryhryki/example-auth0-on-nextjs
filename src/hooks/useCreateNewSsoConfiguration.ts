@@ -1,5 +1,6 @@
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react'
 import { AddMessage } from '@/hooks/useMessages'
+import { fetchApi } from '@/utils/api'
 
 interface FormValues {
   type: string
@@ -37,22 +38,12 @@ export const useCreateNewSsoConfiguration = (args: UseCreateNewSsoConfigurationA
     const { type, name, signInUrl, x509SigningCert } = values
     if (x509SigningCert == null) return
 
-    const response = await fetch(`/api/auth0/configurations/create/${type}`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify({ name, signInUrl, x509SigningCert: await x509SigningCert.text() }),
-    })
-    if (response.ok) {
-      const body = await response.text()
-      args.addMessage('info', `SSO configuration created successfully: ${body}`)
-    } else {
-      const { status } = response
-      const body = await response.text()
-      const errorMessage = `Failed to create SSO configuration: ${status} ${body}`
-      args.addMessage('error', errorMessage)
-    }
+    const response = await fetchApi(
+      'POST',
+      `/auth0/connections/create/${type}`,
+      { name, signInUrl, x509SigningCert: await x509SigningCert.text() },
+    )
+    args.addMessage('info', `SSO configuration created successfully: ${JSON.stringify(response)}`)
   }
 
   return {
