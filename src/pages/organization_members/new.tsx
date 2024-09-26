@@ -1,6 +1,4 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
-import { Messages } from '@/components/message/Messages'
-import { useMessages } from '@/hooks/useMessages'
 import { useCreateNewInvitation } from '@/hooks/useCreateNewInvitation'
 import { useOrganizationConnections } from '@/hooks/useOrganizationConnections'
 import { Auth0Session, getServerSidePropsForSession } from '@/utils/session'
@@ -8,8 +6,7 @@ import { Loading } from '@/components/loading/Loading'
 
 export default function UsersNewPage(props: Auth0Session) {
   const { organization: { orgIdWithoutPrefix } } = props
-  const { errorMessages, removeMessage, addMessage } = useMessages()
-  const { values, setValues, canSubmit, onSubmit } = useCreateNewInvitation({ addMessage })
+  const { values, setValues, canSubmit, onSubmit } = useCreateNewInvitation()
   const { connections, loading } = useOrganizationConnections()
 
   return (
@@ -44,7 +41,6 @@ export default function UsersNewPage(props: Auth0Session) {
         </label>
         <input type="submit" value="Create" disabled={!canSubmit} />
       </form>
-      <Messages errorMessages={errorMessages} removeMessage={removeMessage} />
     </section>
   )
 }
