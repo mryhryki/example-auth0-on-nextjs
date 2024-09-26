@@ -5,7 +5,7 @@ import { useCurrentUrl } from '@/hooks/useCurrentUrl'
 
 const Paths: string[] = [
   '/access_info',
-  '/users',
+  '/organization_members',
   '/sso_configurations',
 ]
 
