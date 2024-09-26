@@ -1,6 +1,5 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
-import { GetServerSidePropsContext } from 'next'
-import { Auth0Session, getAuth0Session } from '@/utils/session'
+import { Auth0Session, getServerSidePropsForSession } from '@/utils/session'
 
 export default function AccessInfoPage(props: Auth0Session) {
   const { user, organization, accessToken } = props
@@ -42,9 +41,6 @@ export default function AccessInfoPage(props: Auth0Session) {
 }
 
 export const getServerSideProps = withPageAuthRequired({
-  getServerSideProps: async function getServerSideProps(ctx: GetServerSidePropsContext) {
-    const props = await getAuth0Session(ctx.req, ctx.res)
-    return { props }
-  },
+  getServerSideProps: getServerSidePropsForSession,
 })
 
