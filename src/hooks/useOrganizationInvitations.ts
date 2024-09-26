@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { fetchApi } from '@/utils/api'
 import { Auth0OrganizationInvitation } from '@/pages/api/auth0/user_management_api_v2/organizations/get_invitations'
+import { AppMessage } from '@/components/message/AppMessage'
 
 interface UseOrganizationInvitationsState {
   invitations: Auth0OrganizationInvitation[]
@@ -16,8 +17,11 @@ export const useOrganizationInvitations = (): UseOrganizationInvitationsState =>
       'GET',
       '/auth0/user_management_api_v2/organizations/get_invitations',
     ).then((data) => {
-      loading.current = false
       setInvitations(data.invitations)
+    }).catch((err) => {
+      AppMessage.addErrorMessage(`Failed to load invitations: ${err}`)
+    }).finally(() => {
+      loading.current = false
     })
   }, [])
 
