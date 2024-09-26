@@ -3,6 +3,7 @@ import {
 } from '@/pages/api/auth0/user_management_api_v2/organizations/get_enabled_connections'
 import { useEffect, useRef, useState } from 'react'
 import { fetchApi } from '@/utils/api'
+import { AppMessage } from '@/components/message/AppMessage'
 
 interface UseOrganizationConnectionsState {
   connections: Auth0OrganizationConnection[]
@@ -18,8 +19,11 @@ export const useOrganizationConnections = (): UseOrganizationConnectionsState =>
       'GET',
       '/auth0/user_management_api_v2/organizations/get_enabled_connections',
     ).then((data) => {
-      loading.current = false
       setConnections(data.connections)
+    }).catch((err) => {
+      AppMessage.addErrorMessage(`Failed to load connections: ${err}`)
+    }).finally(() => {
+      loading.current = false
     })
   }, [])
 
