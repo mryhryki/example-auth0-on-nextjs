@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import { GetServerSideProps, GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next'
 import { getAccessToken, getSession } from '@auth0/nextjs-auth0'
 import { IncomingMessage, ServerResponse } from 'node:http'
 import { NextRequest, NextResponse } from 'next/server'
@@ -38,9 +38,7 @@ export const getAuth0Session = async (...args: [IncomingMessage, ServerResponse]
   if (session == null) {
     throw new Error('No session')
   }
-
   const { user } = session
-
 
   const orgId = user?.org_id ?? '(No org_id)'
   const orgName = user?.org_name ?? '(No org_name)'
@@ -79,4 +77,9 @@ export const getAuth0Session = async (...args: [IncomingMessage, ServerResponse]
       accessTokenExpiresAt: accessTokenExpiresAt ?? 0,
     },
   }
+}
+
+export const getServerSidePropsForSession: GetServerSideProps<Auth0Session> = async (ctx: GetServerSidePropsContext) => {
+  const session = await getAuth0Session(ctx.req, ctx.res)
+  return { props: session }
 }
