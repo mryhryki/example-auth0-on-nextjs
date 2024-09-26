@@ -1,6 +1,6 @@
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { GetServerSidePropsContext } from 'next'
-import { auth0ManagementClient } from '@/utils/auth0'
+import { auth0ManagementClient } from '@/utils/auth0/client'
 
 interface OrganizationConnection {
   connection_id: string;
