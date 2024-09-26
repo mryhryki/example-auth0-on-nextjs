@@ -3,7 +3,7 @@ import { Messages } from '@/components/message/Messages'
 import { useMessages } from '@/hooks/useMessages'
 import { useCreateNewInvitation } from '@/hooks/useCreateNewInvitation'
 import { GetServerSidePropsContext } from 'next'
-import { auth0ManagementClient } from '@/utils/auth0'
+import { auth0ManagementClient } from '@/utils/auth0/client'
 
 interface Connection {
   id: string
