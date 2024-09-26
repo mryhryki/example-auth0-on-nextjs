@@ -18,7 +18,9 @@ export default function UsersPage() {
             {members.map((member, i) => (
               <li key={member.user_id ?? i.toString()}>
                 <strong>{member.email ?? '(No email)'}</strong>
-                (<strong>{member.user_id ?? 'No user_id'}</strong>)
+                <ul>
+                  <li>ID: <strong>{member.user_id ?? 'No user_id'}</strong></li>
+                </ul>
               </li>
             ))}
         </ol>
