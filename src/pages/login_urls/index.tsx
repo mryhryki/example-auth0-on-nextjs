@@ -14,14 +14,21 @@ export default function AccessInfoPage(props: Auth0Session) {
     <section>
       <h2>Login URLs</h2>
       <ul>
-        <li>Not specified login method: <Link href={base}>{base}</Link></li>
+        <li>Not specified login method
+          <ul>
+            <li><Link href={base}>{base}</Link></li>
+          </ul>
+        </li>
         {loading ? <Loading /> :
           connections.map((connection) => {
             const name = connection.connection.name.replace(new RegExp(`^${orgIdWithoutPrefix}-`), '')
-            const url = `${base}&connection=${connection.connection_id}`
+            const url = `${base}&connection=${connection.connection.name}`
             return (
               <li key={connection.connection_id}>
-                {name}: <Link href={url}>{url}</Link>
+                Login with <strong>{name}</strong>
+                <ul>
+                  <li><Link href={url}>{url}</Link></li>
+                </ul>
               </li>
             )
           })
