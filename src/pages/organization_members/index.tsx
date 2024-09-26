@@ -28,7 +28,7 @@ export default function UsersPage() {
       </section>
       <section>
         <h2>2. Invitations</h2>
-        <Link href="/src/pages/organization_members/new">Create an invitation</Link>
+        <Link href="/organization_members/new">Create an invitation</Link>
         {loadingInvitations ? <Loading /> : (
           <ol>
             {invitations.map((invitation) => (
