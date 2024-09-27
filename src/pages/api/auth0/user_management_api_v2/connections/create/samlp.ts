@@ -1,7 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0'
 import { auth0ManagementClient } from '@/utils/auth0/client'
+import { getConnectionByOrganizationMetadata } from '@/utils/auth0/getConnectionByOrganizationMetadata'
 
+const MAX_CONNECTIONS = 2
 const OrgIdPrefix = 'org_'
 
 export default withApiAuthRequired(async (
@@ -15,6 +17,13 @@ export default withApiAuthRequired(async (
 
     if (typeof orgId !== 'string' || !orgId.trim().startsWith(OrgIdPrefix)) {
       throw new Error('org_id is invalid')
+    }
+
+    const { data: organization } = await auth0ManagementClient.organizations.get({ id: orgId })
+    const connections = getConnectionByOrganizationMetadata(organization.metadata)
+    if (connections.length >= MAX_CONNECTIONS) {
+      res.status(403).json({ success: false, error: 'Max connection reached' })
+      return
     }
 
     const { name, signInUrl, x509SigningCert } = req.body
