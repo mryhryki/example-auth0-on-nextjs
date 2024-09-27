@@ -1,7 +1,7 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { GetServerSidePropsContext } from 'next'
 import { useCreateNewSsoConfiguration } from '@/hooks/useCreateNewSsoConfiguration'
-import { Auth0Session, getAuth0Session } from '@/utils/session'
+import { Auth0Session, getAuth0Session } from '@/utils/auth0/session'
 
 export default function SsoConfigurationsNewPage(props: Auth0Session) {
   const { organization } = props
