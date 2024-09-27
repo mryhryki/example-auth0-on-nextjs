@@ -9,7 +9,7 @@ export default function SsoConfigurationIndexPage(props: Auth0Session) {
   const { orgId, displayName, enableSSO } = organization
 
   const baseUrl = `/api/auth/login?organization=${orgId}`
-  const { loading, updating, connectionsByOrganizationMetadata, reload, updateOrganizationMetadata } = useOrganization()
+  const { loading, updating, connectionsByOrganizationMetadata, updateOrganizationMetadata } = useOrganization()
 
   return (
     <section>
