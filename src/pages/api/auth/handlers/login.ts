@@ -8,6 +8,7 @@ export const auth0LoginHandler = async (req: NextApiRequest, res: NextApiRespons
   const organizationByQuery = filterString(req.query.organization)
   const connectionByQuery = filterString(req.query.connection)
 
+  // https://nextjs.org/docs/pages/api-reference/functions/next-request#cookies
   const organizationByCookie = filterString(req.cookies['auth0-organization'])
   const connectionByCookie = filterString(req.cookies['auth0-connection'])
 
