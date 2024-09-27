@@ -5,6 +5,7 @@ import { AppMessage } from '@/components/message/AppMessage'
 interface FormValues {
   type: string
   name: string
+  displayName: string
   signInUrl: string
   x509SigningCert: File | null
 }
@@ -22,11 +23,12 @@ export const useCreateNewSsoConfiguration = (): UseCreateNewSsoConfigurationStat
   const [values, setValues] = useState<FormValues>({
     type: 'samlp',
     name: '',
+    displayName: '',
     signInUrl: '',
     x509SigningCert: null,
   })
 
-  const canSubmit: boolean = NamePattern.test(values.name) && values.signInUrl !== '' && values.x509SigningCert !== null
+  const canSubmit: boolean = NamePattern.test(values.name) && values.displayName !== '' && values.signInUrl !== '' && values.x509SigningCert !== null
   const onSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     if (!canSubmit) return
