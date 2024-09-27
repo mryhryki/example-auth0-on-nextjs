@@ -17,15 +17,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ### Prepare
 
-Set environment variables:
-
 ```shell
-export AUTH0_DOMAIN="(your auth0 domain)"
-export AUTH0_CLIENT_ID="(your auth0 client id)"
-
-export AUTH0_CLIENT_SECRET="(your auth0 client secret)"
-# or AUTH0_CLIENT_SIGNING_KEY_PATH
-# or AUTH0_ACCESS_TOKEN"
+cp auth0-deploy-cli/config.json{.example,}
+# And edit config.json
 ```
 
 ### Deploy by CLI
