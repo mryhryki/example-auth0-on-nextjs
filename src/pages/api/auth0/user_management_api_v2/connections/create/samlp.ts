@@ -16,14 +16,13 @@ export default withApiAuthRequired(async (
     const orgId = user?.org_id
 
     if (typeof orgId !== 'string' || !orgId.trim().startsWith(OrgIdPrefix)) {
-      throw new Error('org_id is invalid')
+      return res.status(500).json({ success: false, error: 'org_id is invalid' })
     }
 
     const { data: organization } = await auth0ManagementClient.organizations.get({ id: orgId })
     const connections = getConnectionByOrganizationMetadata(organization.metadata)
     if (connections.length >= MAX_CONNECTIONS) {
-      res.status(403).json({ success: false, error: 'Max connection reached' })
-      return
+      return res.status(403).json({ success: false, error: `Max connection(${MAX_CONNECTIONS}) reached` })
     }
 
     const { name, signInUrl, x509SigningCert } = req.body
