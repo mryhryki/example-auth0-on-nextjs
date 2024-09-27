@@ -1,11 +1,9 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { useCreateNewInvitation } from '@/hooks/useCreateNewInvitation'
-import { Auth0Session, getServerSidePropsForSession } from '@/utils/auth0/session'
 import { Loading } from '@/components/loading/Loading'
 import { useOrganization } from '@/hooks/useOrganization'
 
-export default function UsersNewPage(props: Auth0Session) {
-  const { organization: { orgIdWithoutPrefix } } = props
+export default function UsersNewPage() {
   const { values, setValues, canSubmit, onSubmit } = useCreateNewInvitation()
   const { loading, connectionsByOrganizationMetadata } = useOrganization()
 
@@ -45,7 +43,5 @@ export default function UsersNewPage(props: Auth0Session) {
   )
 }
 
-export const getServerSideProps = withPageAuthRequired({
-  getServerSideProps: getServerSidePropsForSession,
-})
+export const getServerSideProps = withPageAuthRequired({})
 
