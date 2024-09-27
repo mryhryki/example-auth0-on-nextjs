@@ -1,23 +1,19 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import Link from 'next/link'
 import { Auth0Session, getServerSidePropsForSession } from '@/utils/session'
-import { useOrganizationConnections } from '@/hooks/useOrganizationConnections'
 import { Loading } from '@/components/loading/Loading'
 import { useOrganization } from '@/hooks/useOrganization'
-import { useOrganizationUpdate } from '@/hooks/useOrganizationUpdate'
 
 export default function SsoConfigurationIndexPage(props: Auth0Session) {
   const { organization } = props
-  const { orgId, orgIdWithoutPrefix, displayName, enableSSO } = organization
+  const { orgId, displayName, enableSSO } = organization
 
   const baseUrl = `/api/auth/login?organization=${orgId}`
-  const { connections, loading: loadingOrganizationConnections } = useOrganizationConnections()
-  const { loading: loadingOrganization, restrictedConnectionIds, reload } = useOrganization()
-  const { loading: loadingOrganizationUpdate, updateOrganization } = useOrganizationUpdate()
+  const { loading, updating, connectionsByOrganizationMetadata, reload, updateOrganizationMetadata } = useOrganization()
 
   return (
     <section>
-      <h1>SSO Configurations</h1>
+      <h1>Connections</h1>
       {(() => {
         if (!enableSSO) {
           return (
@@ -26,60 +22,48 @@ export default function SsoConfigurationIndexPage(props: Auth0Session) {
             </p>
           )
         }
-        if (loadingOrganizationConnections) {
+        if (loading) {
           return (
             <>
-              <Link href="/connections/new">Add new configuration</Link>
+              <Link href="/connections/new">Add new connection</Link>
               <Loading />
             </>
           )
         }
         return (
           <>
-            <Link href="/connections/new">Add new configuration</Link>
+            <Link href="/connections/new">Add new connection</Link>
             <ol>
-              {connections.map((connection) => {
-                const { connection_id: id, connection: { name, strategy } } = connection
-                const nameWithoutPrefix = name.replace(new RegExp(`^${orgIdWithoutPrefix}-`), '')
+              {connectionsByOrganizationMetadata.map((connection) => {
+                const { connectionId, displayName, name, enabled } = connection
                 const loginUrl = `${baseUrl}&connection=${name}`
-                const restricted = restrictedConnectionIds.includes(id)
                 return (
-                  <li key={id}>
-                    <strong>{nameWithoutPrefix}</strong>
+                  <li key={connectionId}>
+                    <strong>{displayName}</strong>
                     <ul>
-                      <li>ID: <strong>{id}</strong></li>
-                      <li>Strategy: <strong>{strategy}</strong></li>
+                      <li>ID: <strong>{connectionId}</strong></li>
                       <li>Login URL:{' '}
                         <Link
                           href={loginUrl}
-                          style={{ textDecorationLine: restricted ? 'line-through' : undefined }}
+                          style={{ textDecorationLine: enabled ? undefined : 'line-through' }}
                         >
                           {loginUrl}
                         </Link>
                       </li>
                       <li>
-                        Restricted: {loadingOrganization ? <Loading /> :
-                        <>
-                          <strong>{restricted ? 'Yes' : 'No'}</strong>
-                          <button
-                            onClick={async () => {
-                              const newRestrictedConnectionIds = restrictedConnectionIds.filter((cid) => cid !== id)
-                              if (!restricted) {
-                                newRestrictedConnectionIds.push(id)
-                              }
-                              await updateOrganization({
-                                metadata: {
-                                  restrictedConnectionIds: JSON.stringify(newRestrictedConnectionIds),
-                                },
-                              })
-                              await reload()
-                            }}
-                            disabled={loadingOrganization || loadingOrganizationUpdate}
-                          >
-                            → {restricted ? 'Remove restrictions' : 'Set restrictions' }
-                          </button>
-                        </>
-                      }
+                        <strong>{enabled ? 'Yes' : 'No'}</strong>
+                        <button
+                          onClick={() => updateOrganizationMetadata({
+                            [connectionId]: JSON.stringify({
+                              displayName,
+                              name,
+                              enabled: !enabled,
+                            }),
+                          })}
+                          disabled={updating}
+                        >
+                          → {enabled ? 'Disable' : 'Enable'}
+                        </button>
                       </li>
                     </ul>
                   </li>
