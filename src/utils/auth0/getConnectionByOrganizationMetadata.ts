@@ -19,7 +19,7 @@ const checkNotEmptyString = (value: unknown, name: string): string => {
   throw new Error(`"${name}" is not a string or blank: ${JSON.stringify(value)}`)
 }
 
-export const getConnectionByOrganizationMetadata = (organizationMetadata: Record<string, string | undefined>): Auth0ConnectionByOrganizationMetadata[] =>
+export const getConnectionByOrganizationMetadata = (organizationMetadata: Record<string, string | null | undefined>): Auth0ConnectionByOrganizationMetadata[] =>
   Object.keys(organizationMetadata)
         .filter((key) => key.startsWith('con_') && organizationMetadata[key] != null)
         .map((connectionId): Auth0ConnectionByOrganizationMetadata => {
