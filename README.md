@@ -15,36 +15,27 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Auth0 Settings
 
+### Prepare
+
+Set environment variables:
+
+```shell
+export AUTH0_DOMAIN="(your auth0 domain)"
+export AUTH0_CLIENT_ID="(your auth0 client id)"
+
+export AUTH0_CLIENT_SECRET="(your auth0 client secret)"
+# or AUTH0_CLIENT_SIGNING_KEY_PATH
+# or AUTH0_ACCESS_TOKEN"
+```
+
 ### Deploy by CLI
 
 ```shell
 $ npm run auth0:deploy
 ```
 
-### Application
+### Download settings by CLI
 
-#### ID Token
-
-- ID Token Expiration: `120` seconds
-
-#### Refresh Token Rotation
-
-- Rotation: `ON`
-- Reuse Interval: `1` seconds
-
-#### Refresh Token Expiration
-
-- Absolute Expiration: `ON`
-- Absolute Lifetime: `900` seconds
-- Inactivity Expiration: `ON`
-- Inactivity Lifetime: `300` seconds
-
-### API
-
-#### Token Settings
-
-- Token Expiration (Seconds): `90`
-
-#### Access Settings
-
-- Allow Offline Access: `ON`
+```shell
+$ npm run auth0:export
+```
