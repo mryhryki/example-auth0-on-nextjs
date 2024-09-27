@@ -25,15 +25,22 @@ export default withApiAuthRequired(async (
       return res.status(403).json({ success: false, error: `Max connection(${MAX_CONNECTIONS}) reached` })
     }
 
-    const { name, signInUrl, x509SigningCert } = req.body
-
+    const { name, displayName, signInUrl, x509SigningCert } = req.body
     const { data: { id: connectionId, name: connectionName } } = await auth0ManagementClient.connections.create({
       strategy: 'samlp',
       name: `${orgId.substring(OrgIdPrefix.length)}-${name}`,
+      display_name: displayName,
       options: {
         signInEndpoint: signInUrl,
         signingCert: x509SigningCert,
       }
+    })
+
+    await auth0ManagementClient.organizations.update({ id: orgId }, {
+      metadata: {
+        ...(organization.metadata ?? {}),
+        [connectionId]: JSON.stringify({ name: connectionName, enabled: true, displayName }),
+      },
     })
 
     await auth0ManagementClient.organizations.addEnabledConnection({ id: orgId }, {
