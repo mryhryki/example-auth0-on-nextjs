@@ -7,4 +7,5 @@
 exports.onExecutePostLogin = async (event, api) => {
   api.idToken.setCustomClaim('orgDisplayName', event.organization?.display_name);
   api.idToken.setCustomClaim('orgEnableSSO', event.organization?.metadata?.enableSSO === 'true');
+  api.idToken.setCustomClaim('loginConnectionName', event.connection.name)
 };
