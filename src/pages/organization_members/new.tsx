@@ -1,6 +1,6 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { useCreateNewInvitation } from '@/hooks/useCreateNewInvitation'
-import { Auth0Session, getServerSidePropsForSession } from '@/utils/session'
+import { Auth0Session, getServerSidePropsForSession } from '@/utils/auth0/session'
 import { Loading } from '@/components/loading/Loading'
 import { useOrganization } from '@/hooks/useOrganization'
 
