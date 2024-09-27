@@ -28,11 +28,7 @@ export default function SelectLoginPage(props: SelectLoginPageProps) {
         {loginWithIdAndPasswordUrl}
       </Link>
 
-      <p>If you need to log in with another different organization or connection, please use the exclusive links:</p>
-      <ul>
-        <li>Logging in with a different Organization</li>
-        <li>Logging in with a different Connection</li>
-      </ul>
+      <p>If you need to log in with another organization or connection, please use the exclusive links.</p>
     </main>
   )
 }
