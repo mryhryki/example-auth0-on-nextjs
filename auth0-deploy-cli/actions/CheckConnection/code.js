@@ -8,11 +8,11 @@
 exports.onExecutePostLogin = async (event, api) => {
   const enabledConnectionIds = getEnabledConnectionIds(event);
   const loginConnection = getLoginConnectionId(event);
-  const allowBackdoor = isAllowBackdoorUser(event);
+  const allowBackddor = isAllowBackddorUser(event);
 
   const useEnabledConnection = enabledConnectionIds.includes(loginConnection);
 
-  if (!useEnabledConnection && !allowBackdoor) {
+  if (!useEnabledConnection && !allowBackddor) {
     api.access.deny("use_disabled_connection");
   }
 };
@@ -34,6 +34,6 @@ function getLoginConnectionId(event) {
   return event.connection.id;
 }
 
-function isAllowBackdoorUser(event) {
+function isAllowBackddorUser(event) {
   return event.user.app_metadata.allowBackdoor === true;
 }
