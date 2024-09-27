@@ -16,18 +16,19 @@ export default function SelectLoginPage(props: SelectLoginPageProps) {
 
   return (
     <main style={{ maxWidth: '40rem', margin: '0 auto'}}>
-      <h1>Choose Your Login Method</h1>
+      <h1>Choose the Login Method</h1>
+
       <p>If you would like to log in using the same method as last time, please click the following link:</p>
       <Link href={previousLoginMethodUrl}>
         {previousLoginMethodUrl}
       </Link>
 
-      <p>To log in using your ID and password, please click the following link:</p>
+      <p>If you would like to log in using your ID and password, please click the following link:</p>
       <Link href={loginWithIdAndPasswordUrl}>
         {loginWithIdAndPasswordUrl}
       </Link>
 
-      <p>If you need to log in with a different organization or connection, please use these links:</p>
+      <p>If you need to log in with another different organization or connection, please use the exclusive links:</p>
       <ul>
         <li>Logging in with a different Organization</li>
         <li>Logging in with a different Connection</li>
