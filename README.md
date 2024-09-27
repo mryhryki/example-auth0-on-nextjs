@@ -1,11 +1,16 @@
 # example-auth0-on-nextjs
 
-- https://nextjs.org/docs
-- https://auth0.com/docs/quickstart/webapp/nextjs
-
 ## Development
 
-First, run the development server:
+### Prepare
+
+```shell
+cp .env.{example,local}
+# And edit .env.local
+npm install
+```
+
+### Run development server
 
 ```bash
 npm run dev
@@ -33,3 +38,9 @@ $ npm run auth0:deploy
 ```shell
 $ npm run auth0:export
 ```
+
+## References
+
+- https://nextjs.org/docs
+- https://auth0.com/docs/quickstart/webapp/nextjs
+
