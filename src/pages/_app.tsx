@@ -7,6 +7,14 @@ import { AppSideBar } from '@/components/layout/AppSideBar'
 import { Messages } from '@/components/message/Messages'
 
 export default function App({ Component, pageProps }: AppProps) {
+  if (('disableDefaultLayout' in Component) && Component.disableDefaultLayout) {
+    return (
+      <UserProvider>
+        <Component {...pageProps} />
+      </UserProvider>
+    )
+  }
+
   return (
     <UserProvider>
       <div className={styles.wrapper}>
