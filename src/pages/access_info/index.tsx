@@ -1,5 +1,5 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
-import { Auth0Session, getServerSidePropsForSession } from '@/utils/session'
+import { Auth0Session, getServerSidePropsForSession } from '@/utils/auth0/session'
 
 export default function AccessInfoPage(props: Auth0Session) {
   const { user, organization, accessToken } = props
