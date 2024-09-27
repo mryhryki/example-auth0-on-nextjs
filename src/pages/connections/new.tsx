@@ -31,6 +31,15 @@ export default function SsoConfigurationsNewPage(props: Auth0Session) {
           />
         </label>
         <label>
+          <div>Display Name (Max: 30 characters)</div>
+          <input
+            type="text"
+            value={values.displayName}
+            onChange={(event) => setValues((prev) => ({ ...prev, displayName: event.target.value }))}
+            maxLength={30}
+          />
+        </label>
+        <label>
           <div>Sign In URL</div>
           <input
             type="text"
