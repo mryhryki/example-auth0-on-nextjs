@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { fetchApi } from '@/utils/api'
+import { fetchApi } from '@/utils/auth0/api'
 import { Auth0OrganizationMember } from '@/pages/api/auth0/user_management_api_v2/organizations/get_members'
 import { AppMessage } from '@/components/message/AppMessage'
 
