@@ -37,3 +37,8 @@ next-env.d.ts
 
 auth0-deploy-cli/config.json
 auth0-deploy-cli/tenant.yaml
+auth0-deploy-cli/databases/
+auth0-deploy-cli/emailTemplates/
+auth0-deploy-cli/hooks/
+auth0-deploy-cli/pages/
+auth0-deploy-cli/rules/
