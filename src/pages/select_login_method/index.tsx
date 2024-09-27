@@ -1,15 +1,21 @@
 import { GetServerSidePropsContext } from 'next'
 import { filterString } from '@/utils/string'
 import Link from 'next/link'
+import {
+  Auth0ConnectionByOrganizationMetadata,
+  getConnectionByOrganizationMetadata,
+} from '@/utils/auth0/getConnectionByOrganizationMetadata'
+import { auth0ManagementClient } from '@/utils/auth0/client'
 
 interface SelectLoginPageProps {
   organization: string | null
   connection: string | null
+  otherOrganizations: Auth0ConnectionByOrganizationMetadata[]
 }
 
 SelectLoginPage.disableDefaultLayout = true
 export default function SelectLoginPage(props: SelectLoginPageProps) {
-  const { connection, organization } = props
+  const { connection, organization, otherOrganizations } = props
 
   const previousLoginMethodUrl = `/api/auth/login?organization=${organization}&connection=${connection}`;
   const loginWithIdAndPasswordUrl = '/api/auth/login?connection=Username-Password-Authentication';
@@ -23,23 +29,46 @@ export default function SelectLoginPage(props: SelectLoginPageProps) {
         {previousLoginMethodUrl}
       </Link>
 
+      {otherOrganizations.length > 0 && (
+        <>
+          <p>If you would like to login with other connection, please click the following link:</p>
+          <ul>
+            {otherOrganizations.map((connection) => {
+              const url = `/api/auth/login?organization=${organization}&connection=${connection.name}`
+              return (
+                <li key={connection.name}>
+                  <Link href={url}>
+                    {url}
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </>
+      )}
+
       <p>If you would like to log in using your ID and password, please click the following link:</p>
       <Link href={loginWithIdAndPasswordUrl}>
         {loginWithIdAndPasswordUrl}
       </Link>
 
-      <p>If you need to log in with another organization or connection, please use the exclusive links.</p>
+      <p>If you would like to log in with other organization, please use the exclusive link.</p>
     </main>
   )
 }
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const organization = filterString(ctx.query.organization);
-  const connection = filterString(ctx.query.connection);
+  const organizationName = filterString(ctx.query.organization)
+  const connectionName = filterString(ctx.query.connection)
+
+  const otherOrganizations = organizationName == null ? [] :
+    getConnectionByOrganizationMetadata((await auth0ManagementClient.organizations.getByName({ name: organizationName })).data.metadata)
+      .filter((connection) => connection.name !== connectionName)
 
   const props: SelectLoginPageProps = {
-    organization,
-    connection,
+    organization: organizationName,
+    connection: connectionName,
+    otherOrganizations,
   }
   return { props }
 }
