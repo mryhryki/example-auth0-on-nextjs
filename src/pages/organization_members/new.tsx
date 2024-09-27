@@ -1,13 +1,13 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { useCreateNewInvitation } from '@/hooks/useCreateNewInvitation'
-import { useOrganizationConnections } from '@/hooks/useOrganizationConnections'
 import { Auth0Session, getServerSidePropsForSession } from '@/utils/session'
 import { Loading } from '@/components/loading/Loading'
+import { useOrganization } from '@/hooks/useOrganization'
 
 export default function UsersNewPage(props: Auth0Session) {
   const { organization: { orgIdWithoutPrefix } } = props
   const { values, setValues, canSubmit, onSubmit } = useCreateNewInvitation()
-  const { connections, loading } = useOrganizationConnections()
+  const { loading, connectionsByOrganizationMetadata } = useOrganization()
 
   return (
     <section>
@@ -20,12 +20,12 @@ export default function UsersNewPage(props: Auth0Session) {
               value={values.connectionId}
               onChange={(event) => setValues((prev) => ({ ...prev, connectionId: event.target.value }))}
             >
-              {connections.map((connection) => (
+              {connectionsByOrganizationMetadata.map((connection) => (
                 <option
-                  key={connection.connection_id}
-                  value={connection.connection_id}
+                  key={connection.connectionId}
+                  value={connection.connectionId}
                 >
-                  {connection.connection.name.replace(new RegExp(`^${orgIdWithoutPrefix}-`), '')}
+                  {connection.displayName}
                 </option>
               ))}
             </select>
