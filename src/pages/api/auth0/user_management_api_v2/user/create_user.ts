@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { withApiAuthRequired } from '@auth0/nextjs-auth0'
 import { auth0ManagementClient } from '@/utils/auth0/client'
-import { ApiResponse } from '@/pages/api/auth0/common'
+import { ApiResponse, getOrganizationId } from '@/pages/api/auth0/common'
 
 export interface Auth0User {
   user_id: string;
@@ -49,15 +49,11 @@ interface ApiResponseData {
   user: Auth0User
 }
 
-const HexChars = '0123456789abcdef'
+const PasswordChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_!@#$%^&*()[]{}|;:,.<>?'
 const generateRandomPassword = (): string => {
   const arr = new Uint8Array(128)
   crypto.getRandomValues(arr)
-  return Array.from(arr).map((i) => {
-    const first = HexChars[i >> 4]
-    const second = HexChars[i & 0x0f]
-    return `${first}${second}`
-  }).join('')
+  return Array.from(arr).map((i) => PasswordChars[i % PasswordChars.length]).join('')
 }
 
 export default withApiAuthRequired(async (
@@ -65,12 +61,15 @@ export default withApiAuthRequired(async (
   res: NextApiResponse<ApiResponse<ApiResponseData>>,
 ) => {
   try {
-    const { connectionId, email } = req.body
+    const organizationId = await getOrganizationId(req, res)
+    const { connectionName, email } = req.body
     const { data } = await auth0ManagementClient.users.create({
       email,
-      connection: connectionId,
+      connection: connectionName,
       password: generateRandomPassword(),
     })
+
+    await auth0ManagementClient.organizations.addMembers({ id: organizationId }, { members: [data.user_id] })
 
     res.status(200).json({ success: true, payload: { user: data } })
   } catch (err) {
