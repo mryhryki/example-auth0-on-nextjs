@@ -27,7 +27,7 @@ exports.onExecutePostLogin = async (event, api) => {
     requestParameters,
   );
 
-  const organizationId = event.organization.name;
+  const organizationId = event.organization?.name ?? "not_found";
   const connectionName = event.connection.name;
   api.access.deny(`request_re-login:${organizationId}:${connectionName}`);
 };
