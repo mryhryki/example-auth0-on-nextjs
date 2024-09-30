@@ -43,7 +43,7 @@ export default function UsersPage() {
                                       member.user_id ?? '',
                                       identity.provider,
                                       identity.user_id,
-                                    )}
+                                    ).then()}
                                   >
                                     → Remove
                                   </button>
