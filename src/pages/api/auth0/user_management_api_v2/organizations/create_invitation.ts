@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0'
 import { auth0ManagementClient } from '@/utils/auth0/client'
-import { ApiResponse } from '@/pages/api/auth0/common'
+import { ApiResponse, getOrganizationId } from '@/pages/api/auth0/common'
 
 export interface Auth0OrganizationInvitation {
   id: string;
@@ -32,20 +32,15 @@ export default withApiAuthRequired(async (
   res: NextApiResponse<ApiResponse<ApiResponseData>>,
 ) => {
   try {
+    const organizationId = await getOrganizationId(req, res)
     const session = await getSession(req, res)
-    const { user } = session ?? {}
-    const inviterEmail = user?.email ?? '(Unknown User)'
-    const orgId = user?.org_id
-
-    if (typeof orgId !== 'string' || orgId.length === 0) {
-      throw new Error('org_id is invalid')
-    }
+    const inviterEmail = session?.user?.email ?? '(Unknown User)'
 
     const clientId = process.env.AUTH0_CLIENT_ID ?? 'Unknown Client ID';
     const { connectionId, email } = req.body
 
     const { data } = await auth0ManagementClient.organizations.createInvitation({
-      id: orgId,
+      id: organizationId,
     },{
       inviter: {
         name: inviterEmail
