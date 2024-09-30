@@ -39,15 +39,11 @@ export default function UsersPage() {
                                 </strong>
                                 {canRemove && (loadingRemoveUserConnection ? <Loading /> : (
                                   <button
-                                    onClick={async () => {
-                                      await removeUserConnection(
-                                        member.user_id ?? '',
-                                        identity.provider,
-                                        identity.user_id,
-                                      )
-                                      await new Promise((resolve) => setTimeout(resolve, 2000))
-                                      await reloadMembers()
-                                    }}
+                                    onClick={() => removeUserConnection(
+                                      member.user_id ?? '',
+                                      identity.provider,
+                                      identity.user_id,
+                                    ).then(reloadMembers)}
                                   >
                                     → Remove
                                   </button>
