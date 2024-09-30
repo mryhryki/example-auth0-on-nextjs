@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { withApiAuthRequired } from '@auth0/nextjs-auth0'
 import { auth0ManagementClient } from '@/utils/auth0/client'
-import { Auth0OrganizationInvitation } from '@/pages/api/auth0/user_management_api_v2/organizations/create_invitation'
 
 export interface Auth0User {
   user_id: string;
