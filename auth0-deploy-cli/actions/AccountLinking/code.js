@@ -8,9 +8,10 @@ const { AuthenticationClient, ManagementClient } = require("auth0");
  */
 exports.onExecutePostLogin = async (event, api) => {
   // see about event and api -> https://auth0.com/docs/customize/actions/flows-and-triggers/login-flow/event-object
+  // Example: https://auth0.com/docs/manage-users/user-accounts/user-account-linking/link-user-accounts#example-account-linking-with-actions
 
   const linkUserTo = getLinkUserTo(event);
-  if (linkUserTo == null) {
+  if (linkUserTo == null || linkUserTo === event.user.user_id) {
     return;
   }
 
@@ -25,6 +26,10 @@ exports.onExecutePostLogin = async (event, api) => {
     { id: linkUserTo },
     requestParameters,
   );
+
+  const organizationId = event.organization.name;
+  const connectionName = event.connection.name;
+  api.access.deny(`request_re-login:${organizationId}:${connectionName}`);
 };
 
 function getLinkUserTo(event) {
