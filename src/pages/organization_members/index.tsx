@@ -3,10 +3,12 @@ import Link from 'next/link'
 import { useOrganizationMembers } from '@/hooks/useOrganizationMembers'
 import { Loading } from '@/components/loading/Loading'
 import { useOrganizationInvitations } from '@/hooks/useOrganizationInvitations'
+import { useOrganizationConnections } from '@/hooks/useOrganizationConnections'
 
 export default function UsersPage() {
   const { members, loading: loadingMembers } = useOrganizationMembers()
   const { invitations, loading: loadingInvitations } = useOrganizationInvitations()
+  const { connections, loading: loadingConnections } = useOrganizationConnections()
 
   return (
     <>
@@ -44,7 +46,15 @@ export default function UsersPage() {
               <li key={invitation.id}>
                 <strong>{invitation.invitee.email}</strong>
                 <ul>
-                  <li>Connection: <strong>{invitation.connection_id ?? '(No connection)'}</strong></li>
+                  <li>
+                    Connection: {loadingConnections ? <Loading /> : (
+                      <strong>
+                        {connections.find((connection) => connection.connection_id ===
+                                                          invitation.connection_id)?.connection.name ?? '(Unknown)'}
+                      </strong>
+                    )}
+                    (ID: <strong>{invitation.connection_id ?? '(Unknown)'}</strong>)
+                  </li>
                   <li>Created: <strong>{invitation.created_at}</strong></li>
                   <li>Expires: <strong>{invitation.expires_at}</strong></li>
                 </ul>
