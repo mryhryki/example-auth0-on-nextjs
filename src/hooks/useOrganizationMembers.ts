@@ -1,19 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
 import { fetchApi } from '@/utils/auth0/api'
-import { Auth0OrganizationMember } from '@/pages/api/auth0/user_management_api_v2/organizations/get_members'
+import {
+  Auth0OrganizationMemberWithRawUserData,
+} from '@/pages/api/auth0/user_management_api_v2/organizations/get_members'
 import { AppMessage } from '@/components/message/AppMessage'
 
 interface UseOrganizationMembersState {
-  members: Auth0OrganizationMember[]
+  members: Auth0OrganizationMemberWithRawUserData[]
   loading: boolean;
 }
 
 export const useOrganizationMembers = (): UseOrganizationMembersState => {
   const loading = useRef(true)
-  const [members, setMembers] = useState<Auth0OrganizationMember[]>([])
+  const [members, setMembers] = useState<Auth0OrganizationMemberWithRawUserData[]>([])
 
   useEffect(() => {
-    fetchApi<{ members: Auth0OrganizationMember[] }>(
+    fetchApi<{ members: Auth0OrganizationMemberWithRawUserData[] }>(
       'GET',
       '/auth0/user_management_api_v2/organizations/get_members',
     ).then((data) => {
