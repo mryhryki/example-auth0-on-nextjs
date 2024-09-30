@@ -23,6 +23,7 @@ export const useRemoveUserConnection = (): UseRemoveUserConnectionState => {
         '/auth0/user_management_api_v2/users/remove_connection',
         { primaryUserAccountId, provider, secondaryLinkedAccountId },
       )
+      await new Promise((resolve) => setTimeout(resolve, 2000)) // Wait for apply changes on Auth0
       AppMessage.addInfoMessage(`Removed user connection: ${JSON.stringify(response)}`)
     } catch (err) {
       AppMessage.addErrorMessage(`Failed to remove user connection: ${err}`)
