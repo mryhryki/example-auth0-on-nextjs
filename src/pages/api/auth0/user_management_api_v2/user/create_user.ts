@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { withApiAuthRequired } from '@auth0/nextjs-auth0'
 import { auth0ManagementClient } from '@/utils/auth0/client'
+import { ApiResponse } from '@/pages/api/auth0/common'
 
 export interface Auth0User {
   user_id: string;
@@ -61,7 +62,7 @@ const generateRandomPassword = (): string => {
 
 export default withApiAuthRequired(async (
   req: NextApiRequest,
-  res: NextApiResponse<ApiResponseData | { error: unknown }>,
+  res: NextApiResponse<ApiResponse<ApiResponseData>>,
 ) => {
   try {
     const { connectionId, email } = req.body
