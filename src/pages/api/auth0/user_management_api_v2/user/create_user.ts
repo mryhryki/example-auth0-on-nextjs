@@ -72,7 +72,7 @@ export default withApiAuthRequired(async (
       password: generateRandomPassword(),
     })
 
-    res.status(200).json({ success: true, payload: { data } })
+    res.status(200).json({ success: true, payload: { user: data } })
   } catch (err) {
     console.error('ERROR:', err)
     res.status(500).json({ success: false, error: err })
