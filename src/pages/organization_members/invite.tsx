@@ -2,16 +2,20 @@ import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { useCreateNewInvitation } from '@/hooks/useCreateNewInvitation'
 import { Loading } from '@/components/loading/Loading'
 import { useOrganization } from '@/hooks/useOrganization'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 
 export default function UsersNewPage() {
   const { values, setValues, canSubmit, onSubmit } = useCreateNewInvitation()
   const { loading, connectionsByOrganizationMetadata } = useOrganization()
+  const validConnection = useMemo(
+    () => connectionsByOrganizationMetadata.filter(({ isDatabaseConnection }) => !isDatabaseConnection),
+    [connectionsByOrganizationMetadata],
+  )
 
   useEffect(() => {
-    if (connectionsByOrganizationMetadata.length === 0) return
-    setValues((prev) => ({ ...prev, connectionId: connectionsByOrganizationMetadata[0].connectionId }))
-  }, [connectionsByOrganizationMetadata, setValues])
+    if (validConnection.length === 0) return
+    setValues((prev) => ({ ...prev, connectionId: validConnection[0].connectionId }))
+  }, [validConnection, setValues])
 
   return (
     <section>
@@ -24,17 +28,14 @@ export default function UsersNewPage() {
               value={values.connectionId}
               onChange={(event) => setValues((prev) => ({ ...prev, connectionId: event.target.value }))}
             >
-              {connectionsByOrganizationMetadata
-                .filter(({ isDatabaseConnection }) => !isDatabaseConnection)
-                .map((connection) => (
+              {validConnection.map((connection) => (
                 <option
                   key={connection.connectionId}
                   value={connection.connectionId}
                 >
                   {connection.displayName}
                 </option>
-                ))
-              }
+              ))}
             </select>
           )}
         </label>
