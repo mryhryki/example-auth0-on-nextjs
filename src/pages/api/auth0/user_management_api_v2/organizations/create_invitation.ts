@@ -1,10 +1,35 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0'
 import { auth0ManagementClient } from '@/utils/auth0/client'
+import { ApiResponse } from '@/pages/api/auth0/common'
+
+export interface Auth0OrganizationInvitation {
+  id: string;
+  organization_id: string;
+  inviter: {
+    name: string;
+  };
+  invitee: {
+    email: string;
+  };
+  invitation_url: string;
+  created_at: string;
+  expires_at: string;
+  connection_id?: string | undefined;
+  client_id: string;
+  app_metadata?: Record<string, unknown>;
+  user_metadata?: Record<string, unknown>;
+  ticket_id: string;
+  roles?: string[] | undefined;
+}
+
+interface ApiResponseData {
+  invitation: Auth0OrganizationInvitation
+}
 
 export default withApiAuthRequired(async (
   req: NextApiRequest,
-  res: NextApiResponse<unknown | { error: unknown }>,
+  res: NextApiResponse<ApiResponse<ApiResponseData>>,
 ) => {
   try {
     const session = await getSession(req, res)
@@ -33,7 +58,7 @@ export default withApiAuthRequired(async (
     })
 
 
-    res.status(200).json({ success: true, payload: { data } })
+    res.status(200).json({ success: true, payload: { invitation: data } })
   } catch (err) {
     console.error('ERROR:', err)
     res.status(500).json({ success: false, error: err })
