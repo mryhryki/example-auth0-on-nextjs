@@ -3,6 +3,7 @@ export interface Auth0ConnectionByOrganizationMetadata {
   displayName: string;
   enabled: boolean;
   name: string
+  isDatabaseConnection: boolean
 }
 
 const checkBoolean = (value: unknown, name: string): boolean => {
@@ -32,5 +33,6 @@ export const getConnectionByOrganizationMetadata = (organizationMetadata: Record
             displayName: checkNotEmptyString(displayName, 'displayName'),
             enabled: checkBoolean(enabled, 'enabled'),
             name: checkNotEmptyString(name, 'name'),
+            isDatabaseConnection: name === 'Username-Password-Authentication',
           }
         })
