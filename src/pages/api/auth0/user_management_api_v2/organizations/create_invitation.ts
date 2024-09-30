@@ -39,6 +39,7 @@ export default withApiAuthRequired(async (
     const clientId = process.env.AUTH0_CLIENT_ID ?? 'Unknown Client ID';
     const { connectionId, email } = req.body
 
+    console.debug('#####', JSON.stringify({ email, connectionId }, null, 2));
     const { data } = await auth0ManagementClient.organizations.createInvitation({
       id: organizationId,
     },{
