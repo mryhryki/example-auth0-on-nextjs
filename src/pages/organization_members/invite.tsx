@@ -24,7 +24,6 @@ export default function UsersNewPage() {
     setValues((prev) => ({ ...prev, userId: members[0].user_id ?? '' }))
   }, [members, setValues])
 
-
   return (
     <section>
       <h1>Create an Invitation</h1>
