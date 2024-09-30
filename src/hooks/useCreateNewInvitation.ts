@@ -30,7 +30,7 @@ export const useCreateNewInvitation = (): UseCreateNewInvitationState => {
         '/auth0/user_management_api_v2/organizations/create_invitation',
         { connectionId, email },
       )
-      AppMessage.addErrorMessage(`Invitation has been created: ${JSON.stringify(response)}`)
+      AppMessage.addInfoMessage(`Invitation has been created: ${JSON.stringify(response)}`)
     } catch (err) {
       AppMessage.addErrorMessage(`Failed to create invitation: ${err}`)
     }
