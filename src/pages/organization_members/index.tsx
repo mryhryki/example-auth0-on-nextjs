@@ -41,9 +41,12 @@ export default function UsersPage() {
                                   <button
                                     onClick={() => removeUserConnection(
                                       member.user_id ?? '',
-                                      identity.connection,
+                                      identity.provider,
+                                      identity.user_id,
                                     )}
-                                  >→ Remove</button>
+                                  >
+                                    → Remove
+                                  </button>
                                 ))}
                               </li>
                             )
