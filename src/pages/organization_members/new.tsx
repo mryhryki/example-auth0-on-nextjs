@@ -1,17 +1,21 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { Loading } from '@/components/loading/Loading'
 import { useOrganization } from '@/hooks/useOrganization'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useCreateNewUser } from '@/hooks/useCreateNewUser'
 
 export default function UsersNewPage() {
   const { values, setValues, canSubmit, onSubmit } = useCreateNewUser()
   const { loading, connectionsByOrganizationMetadata } = useOrganization()
+  const validConnection = useMemo(
+    () => connectionsByOrganizationMetadata.filter(({ isDatabaseConnection }) => isDatabaseConnection),
+    [connectionsByOrganizationMetadata],
+  )
 
   useEffect(() => {
-    if (connectionsByOrganizationMetadata.length === 0) return
-    setValues((prev) => ({ ...prev, connectionId: connectionsByOrganizationMetadata[0].connectionId }))
-  }, [connectionsByOrganizationMetadata, setValues])
+    if (validConnection.length === 0) return
+    setValues((prev) => ({ ...prev, connectionName: validConnection[0].name }))
+  }, [validConnection, setValues])
 
   return (
     <section>
@@ -21,20 +25,17 @@ export default function UsersNewPage() {
           <div>Connection</div>
           {loading ? <Loading /> : (
             <select
-              value={values.connectionId}
-              onChange={(event) => setValues((prev) => ({ ...prev, connectionId: event.target.value }))}
+              value={values.connectionName}
+              onChange={(event) => setValues((prev) => ({ ...prev, connectionName: event.target.value }))}
             >
-              {connectionsByOrganizationMetadata
-                .filter(({ isDatabaseConnection }) => isDatabaseConnection)
-                .map((connection) => (
+              {validConnection.map((connection) => (
                 <option
                   key={connection.connectionId}
-                  value={connection.connectionId}
+                  value={connection.name}
                 >
                   {connection.displayName}
                 </option>
-                ))
-              }
+              ))}
             </select>
           )}
         </label>
