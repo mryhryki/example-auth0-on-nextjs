@@ -37,9 +37,10 @@ export default withApiAuthRequired(async (
     const inviterEmail = session?.user?.email ?? '(Unknown User)'
 
     const clientId = process.env.AUTH0_CLIENT_ID ?? 'Unknown Client ID';
-    const { connectionId, email } = req.body
+    const { connectionId, userId } = req.body
 
-    console.debug('#####', JSON.stringify({ email, connectionId }, null, 2));
+    const user = await auth0ManagementClient.users.get({ id: userId })
+
     const { data } = await auth0ManagementClient.organizations.createInvitation({
       id: organizationId,
     },{
@@ -47,12 +48,14 @@ export default withApiAuthRequired(async (
         name: inviterEmail
       },
       invitee: {
-        email,
+        email: user.data?.email,
       },
       client_id: clientId,
       connection_id: connectionId,
+      app_metadata: {
+        linkUserTo: userId,
+      },
     })
-
 
     res.status(200).json({ success: true, payload: { invitation: data } })
   } catch (err) {
