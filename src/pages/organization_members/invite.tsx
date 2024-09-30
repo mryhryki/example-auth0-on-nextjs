@@ -21,8 +21,9 @@ export default function UsersNewPage() {
   const { loading: loadingOrganizationMembers, members } = useOrganizationMembers()
   useEffect(() => {
     if (members.length === 0) return
-    setValues((prev) => ({ ...prev, email: members[0].email ?? '' }))
+    setValues((prev) => ({ ...prev, userId: members[0].user_id ?? '' }))
   }, [members, setValues])
+
 
   return (
     <section>
