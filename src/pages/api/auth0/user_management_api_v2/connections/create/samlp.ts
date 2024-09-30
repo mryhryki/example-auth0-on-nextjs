@@ -2,13 +2,19 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0'
 import { auth0ManagementClient } from '@/utils/auth0/client'
 import { getConnectionByOrganizationMetadata } from '@/utils/auth0/getConnectionByOrganizationMetadata'
+import { ApiResponse } from '@/pages/api/auth0/common'
 
 const MAX_CONNECTIONS = 2
 const OrgIdPrefix = 'org_'
 
+interface ApiResponseData {
+  connectionId: string,
+  connectionName: string
+}
+
 export default withApiAuthRequired(async (
   req: NextApiRequest,
-  res: NextApiResponse<unknown | { error: unknown }>,
+  res: NextApiResponse<ApiResponse<ApiResponseData>>,
 ) => {
   try {
     const session = await getSession(req, res)
