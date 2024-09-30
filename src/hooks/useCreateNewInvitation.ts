@@ -17,7 +17,7 @@ interface UseCreateNewInvitationState {
 export const useCreateNewInvitation = (): UseCreateNewInvitationState => {
   const [values, setValues] = useState<FormValues>({ connectionId: '', userId: '' })
 
-  const canSubmit: boolean = values.connectionId.trim().length > 0 && values.userId.startsWith('auth0|')
+  const canSubmit: boolean = values.connectionId.trim().length > 0
   const onSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     if (!canSubmit) return
