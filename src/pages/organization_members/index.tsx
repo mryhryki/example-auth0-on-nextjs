@@ -22,7 +22,7 @@ export default function UsersPage() {
                 <strong>{member.email ?? '(No email)'}</strong>
                 <ul>
                   <li>ID: <strong>{member.user_id ?? 'No user_id'}</strong></li>
-                  <li>{'Identities: '}
+                  <li>{'Connections: '}
                     {(member.rawUserData?.identities?.length ?? 0) > 0 && (
                       member.rawUserData?.identities.map((identity) => (
                       <strong key={identity.connection}>
