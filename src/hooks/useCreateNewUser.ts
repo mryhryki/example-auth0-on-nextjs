@@ -1,8 +1,10 @@
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react'
 import { AppMessage } from '@/components/message/AppMessage'
+import { fetchApi } from '@/utils/auth0/api'
+import { Auth0User } from '@/pages/api/auth0/user_management_api_v2/user/create_user'
 
 interface FormValues {
-  connectionId: string;
+  connectionName: string;
   email: string
 }
 
@@ -14,20 +16,24 @@ interface UseCreateNewUserState {
 }
 
 export const useCreateNewUser = (): UseCreateNewUserState => {
-  const [values, setValues] = useState<FormValues>({ connectionId: '', email: '' })
+  const [values, setValues] = useState<FormValues>({ connectionName: '', email: '' })
 
-  const canSubmit: boolean = values.connectionId.trim().length > 0 &&
+  const canSubmit: boolean = values.connectionName.trim().length > 0 &&
                              values.email.trim().length > 0 &&
                              values.email.includes('@')
   const onSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     if (!canSubmit) return
     try {
-      const { connectionId, email } = values
+      const { connectionName, email } = values
 
-      alert('TODO: create a user')
+      const { user } = await fetchApi<{ user: Auth0User }>(
+        'POST',
+        'auth0/user_management_api_v2/user/create_user',
+        { connectionName, email },
+      )
 
-      AppMessage.addInfoMessage(`Created a user: ${JSON.stringify({ connectionId, email })}`)
+      AppMessage.addInfoMessage(`Created a user: ${JSON.stringify(user)}`)
     } catch (err) {
       AppMessage.addErrorMessage(`Failed to create invitation: ${err}`)
     }
