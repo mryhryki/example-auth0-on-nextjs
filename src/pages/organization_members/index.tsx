@@ -21,11 +21,13 @@ export default function UsersPage() {
                 <ul>
                   <li>ID: <strong>{member.user_id ?? 'No user_id'}</strong></li>
                   <li>{'Identities: '}
-                    {member.rawUserData?.identities.map((identity) => (
+                    {(member.rawUserData?.identities?.length ?? 0) > 0 && (
+                      member.rawUserData?.identities.map((identity) => (
                       <strong key={identity.connection}>
                         {identity.connection}
                       </strong>
-                    ))}
+                      ))
+                    )}
                   </li>
                 </ul>
               </li>
