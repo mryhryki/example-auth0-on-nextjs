@@ -3,12 +3,12 @@ import Link from 'next/link'
 import { useOrganizationMembers } from '@/hooks/useOrganizationMembers'
 import { Loading } from '@/components/loading/Loading'
 import { useOrganizationInvitations } from '@/hooks/useOrganizationInvitations'
-import { useOrganizationConnections } from '@/hooks/useOrganizationConnections'
+import { useOrganization } from '@/hooks/useOrganization'
 
 export default function UsersPage() {
   const { members, loading: loadingMembers } = useOrganizationMembers()
   const { invitations, loading: loadingInvitations } = useOrganizationInvitations()
-  const { connections, loading: loadingConnections } = useOrganizationConnections()
+  const { connectionsByOrganizationMetadata, loading: loadingOrganization } = useOrganization()
 
   return (
     <>
@@ -21,8 +21,8 @@ export default function UsersPage() {
               <li key={member.user_id ?? i.toString()}>
                 <strong>{member.email ?? '(No email)'}</strong>
                 <ul>
-                  <li>ID: <strong>{member.user_id ?? 'No user_id'}</strong></li>
-                  <li>{'Connections: '}
+                  <li>ID:<strong>{member.user_id ?? 'No user_id'}</strong></li>
+                  <li>Connections:
                     {(member.rawUserData?.identities?.length ?? 0) > 0 && (
                       member.rawUserData?.identities.map((identity) => (
                       <strong key={identity.connection}>
@@ -47,16 +47,16 @@ export default function UsersPage() {
                 <strong>{invitation.invitee.email}</strong>
                 <ul>
                   <li>
-                    Connection: {loadingConnections ? <Loading /> : (
+                    Connection:{loadingOrganization ? <Loading /> : (
                       <strong>
-                        {connections.find((connection) => connection.connection_id ===
-                                                          invitation.connection_id)?.connection.name ?? '(Unknown)'}
+                        {connectionsByOrganizationMetadata.find((connection) => connection.connectionId ===
+                                                          invitation.connection_id)?.name ?? '(Unknown)'}
                       </strong>
                     )}
-                    (ID: <strong>{invitation.connection_id ?? '(Unknown)'}</strong>)
+                    (ID:<strong>{invitation.connection_id ?? '(Unknown)'}</strong>)
                   </li>
-                  <li>Created: <strong>{invitation.created_at}</strong></li>
-                  <li>Expires: <strong>{invitation.expires_at}</strong></li>
+                  <li>Created:<strong>{invitation.created_at}</strong></li>
+                  <li>Expires:<strong>{invitation.expires_at}</strong></li>
                 </ul>
               </li>
             ))}
