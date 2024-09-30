@@ -1,8 +1,8 @@
 import { auth0ManagementClient } from '@/utils/auth0/client'
-import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0'
+import { withApiAuthRequired } from '@auth0/nextjs-auth0'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Auth0User } from '@/pages/api/auth0/user_management_api_v2/user/create_user'
-import { ApiResponse } from '@/pages/api/auth0/common'
+import { ApiResponse, getOrganizationId } from '@/pages/api/auth0/common'
 
 
 export interface Auth0OrganizationMember {
@@ -25,9 +25,10 @@ export default withApiAuthRequired(async (
   res: NextApiResponse<ApiResponse<ApiResponseData>>,
 ) => {
   try {
-    const session = (await getSession(req, res)) ?? null
+    const organizationId = await getOrganizationId(req, res)
+
     const { data } = await auth0ManagementClient.organizations.getMembers({
-      id: session?.user.org_id,
+      id: organizationId,
       page: 0,
       per_page: 100,
     })
