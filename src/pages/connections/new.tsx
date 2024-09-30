@@ -11,7 +11,7 @@ export default function SsoConfigurationsNewPage(props: Auth0Session) {
 
   return (
     <section>
-      <h1>Create NEW SSO Configuration for <strong>{displayName}</strong> (Name: <strong>{orgName}</strong>)</h1>
+      <h1>Create NEW SSO Configuration for <strong>{displayName}</strong> (Name:<strong>{orgName}</strong>)</h1>
       <form onSubmit={onSubmit}>
         <label>
           <div>Type</div>
