@@ -20,6 +20,13 @@ export default function UsersPage() {
                 <strong>{member.email ?? '(No email)'}</strong>
                 <ul>
                   <li>ID: <strong>{member.user_id ?? 'No user_id'}</strong></li>
+                  <li>{'Identities: '}
+                    {member.rawUserData?.identities.map((identity) => (
+                      <strong key={identity.connection}>
+                        {identity.connection}
+                      </strong>
+                    ))}
+                  </li>
                 </ul>
               </li>
             ))}
