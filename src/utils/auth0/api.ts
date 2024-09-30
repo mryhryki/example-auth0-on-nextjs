@@ -8,7 +8,11 @@ export const fetchApi = async<T>(method: string, path: string, payload: unknown 
     body,
   })
   if (!response.ok) {
-    throw new Error(`API Error: ${response.status} => ${await response.text()}`)
+    throw new Error(`API Request Error: ${response.status} => ${await response.text()}`)
   }
-  return response.json()
+  const json = await response.json()
+  if (!json.success) {
+    throw new Error(`API Response Error: ${json.error}`)
+  }
+  return json.payload;
 }
