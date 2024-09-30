@@ -18,7 +18,7 @@ export default function SsoConfigurationIndexPage(props: Auth0Session) {
         if (!enableSSO) {
           return (
             <p>
-              <strong>{displayName}</strong> (Name: <strong>{organization.orgName}</strong>) organization is not enabled SSO.
+              <strong>{displayName}</strong> (Name:<strong>{organization.orgName}</strong>) organization is not enabled SSO.
             </p>
           )
         }
@@ -41,7 +41,7 @@ export default function SsoConfigurationIndexPage(props: Auth0Session) {
                   <li key={connectionId}>
                     <strong>{displayName}</strong>
                     <ul>
-                      <li>ID: <strong>{connectionId}</strong></li>
+                      <li>ID:<strong>{connectionId}</strong></li>
                       <li>Login URL:{' '}
                         <Link
                           href={loginUrl}
@@ -51,10 +51,10 @@ export default function SsoConfigurationIndexPage(props: Auth0Session) {
                         </Link>
                       </li>
                       <li>
-                        Database connection: <strong>{isDatabaseConnection ? 'Yes' : 'No'}</strong>
+                        Database connection:<strong>{isDatabaseConnection ? 'Yes' : 'No'}</strong>
                       </li>
                       <li>
-                        Enabled: <strong>{enabled ? 'Yes' : 'No'}</strong>
+                        Enabled:<strong>{enabled ? 'Yes' : 'No'}</strong>
                         <button
                           onClick={() => updateOrganizationMetadata({
                             [connectionId]: JSON.stringify({
