@@ -32,7 +32,7 @@ export default withApiAuthRequired(async (
       })).data.map((connection): Auth0OrganizationConnection => ({
       ...connection,
       customData: {
-        isDatabaseConnection: connection.connection.strategy === 'auth0',
+        isDatabaseConnection: connection.connection.name === 'Username-Password-Authentication',
       },
     }))
     res.status(200).json({ connections })
