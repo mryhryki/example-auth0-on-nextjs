@@ -9,6 +9,9 @@ export interface Auth0OrganizationConnection {
     name: string;
     strategy: string;
   };
+  customData: {
+    isDatabaseConnection: boolean
+  }
 }
 
 interface ApiResponseData {
@@ -21,12 +24,18 @@ export default withApiAuthRequired(async (
 ) => {
   try {
     const session = (await getSession(req, res)) ?? null
-    const { data } = await auth0ManagementClient.organizations.getEnabledConnections({
+    const connections: Auth0OrganizationConnection[] = (await auth0ManagementClient.organizations.getEnabledConnections(
+      {
       id: session?.user.org_id,
       page: 0,
       per_page: 100,
-    })
-    res.status(200).json({ connections: data })
+      })).data.map((connection): Auth0OrganizationConnection => ({
+      ...connection,
+      customData: {
+        isDatabaseConnection: connection.connection.strategy === 'auth0',
+      },
+    }))
+    res.status(200).json({ connections })
   } catch (err) {
     res.status(500).json({ error: err })
   }
