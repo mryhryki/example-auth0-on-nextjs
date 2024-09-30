@@ -51,7 +51,7 @@ export default function SsoConfigurationIndexPage(props: Auth0Session) {
                         </Link>
                       </li>
                       <li>
-                        <strong>{enabled ? 'Yes' : 'No'}</strong>
+                        Enabled: <strong>{enabled ? 'Yes' : 'No'}</strong>
                         <button
                           onClick={() => updateOrganizationMetadata({
                             [connectionId]: JSON.stringify({
