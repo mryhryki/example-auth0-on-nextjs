@@ -1,6 +1,7 @@
 import { auth0ManagementClient } from '@/utils/auth0/client'
 import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { ApiResponse } from '@/pages/api/auth0/common'
 
 export interface Auth0OrganizationInvitation {
   id: string;
@@ -28,7 +29,7 @@ interface ApiResponseData {
 
 export default withApiAuthRequired(async (
   req: NextApiRequest,
-  res: NextApiResponse<ApiResponseData | { error: unknown }>,
+  res: NextApiResponse<ApiResponse<ApiResponseData>>,
 ) => {
   try {
     const session = (await getSession(req, res)) ?? null
@@ -37,8 +38,8 @@ export default withApiAuthRequired(async (
       page: 0,
       per_page: 100,
     })
-    res.status(200).json({ invitations: data})
+    res.status(200).json({ success: true, payload: { invitations: data}})
   } catch (err) {
-    res.status(500).json({ error: err })
+    res.status(500).json({ success: false, error: err })
   }
 })
