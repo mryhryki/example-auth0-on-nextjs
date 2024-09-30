@@ -19,10 +19,11 @@ export default function UsersNewPage() {
   }, [validConnection, setValues])
 
   const { loading: loadingOrganizationMembers, members } = useOrganizationMembers()
+  const validMembers = useMemo(() => members.filter((member) => member.user_id?.startsWith('auth0|')), [members])
   useEffect(() => {
-    if (members.length === 0) return
-    setValues((prev) => ({ ...prev, userId: members[0].user_id ?? '' }))
-  }, [members, setValues])
+    if (validMembers.length === 0) return
+    setValues((prev) => ({ ...prev, userId: validMembers[0].user_id ?? '' }))
+  }, [validMembers, setValues])
 
   return (
     <section>
@@ -53,7 +54,7 @@ export default function UsersNewPage() {
             onChange={(event) => setValues((prev) => ({ ...prev, userId: event.target.value }))}
           >
             {loadingOrganizationMembers ? <Loading /> : (
-              members.map((member) => (
+              validMembers.map((member) => (
                 <option
                   key={member.user_id}
                   value={member.user_id}
