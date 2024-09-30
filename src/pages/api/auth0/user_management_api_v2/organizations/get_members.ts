@@ -1,7 +1,7 @@
 import { auth0ManagementClient } from '@/utils/auth0/client'
 import { withApiAuthRequired } from '@auth0/nextjs-auth0'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Auth0User } from '@/pages/api/auth0/user_management_api_v2/user/create_user'
+import { Auth0User } from '@/pages/api/auth0/user_management_api_v2/users/create_user'
 import { ApiResponse, getOrganizationId } from '@/pages/api/auth0/common'
 
 
