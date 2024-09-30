@@ -1,6 +1,7 @@
 import { auth0ManagementClient } from '@/utils/auth0/client'
 import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { ApiResponse } from '@/pages/api/auth0/common'
 
 export interface Auth0OrganizationConnection {
   connection_id: string;
@@ -20,7 +21,7 @@ interface ApiResponseData {
 
 export default withApiAuthRequired(async (
   req: NextApiRequest,
-  res: NextApiResponse<ApiResponseData | { error: unknown }>,
+  res: NextApiResponse<ApiResponse<ApiResponseData>>,
 ) => {
   try {
     const session = (await getSession(req, res)) ?? null
@@ -35,8 +36,8 @@ export default withApiAuthRequired(async (
         isDatabaseConnection: connection.connection.name === 'Username-Password-Authentication',
       },
     }))
-    res.status(200).json({ connections })
+    res.status(200).json({ success: true, payload: { connections } })
   } catch (err) {
-    res.status(500).json({ error: err })
+    res.status(500).json({ success: false, error: err })
   }
 })
