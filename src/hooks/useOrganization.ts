@@ -54,6 +54,7 @@ export const useOrganization = (): UseOrganizationState => {
       )
       setOrganization(data.organization)
       setConnectionsByOrganizationMetadata(getConnectionByOrganizationMetadata(data.organization.metadata))
+      AppMessage.addInfoMessage('Organization updated')
     } catch (err) {
       AppMessage.addErrorMessage(`Failed to update organization: ${err}`)
     } finally {
