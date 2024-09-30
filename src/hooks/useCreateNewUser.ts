@@ -1,7 +1,7 @@
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react'
 import { AppMessage } from '@/components/message/AppMessage'
 import { fetchApi } from '@/utils/auth0/api'
-import { Auth0User } from '@/pages/api/auth0/user_management_api_v2/user/create_user'
+import { Auth0User } from '@/pages/api/auth0/user_management_api_v2/users/create_user'
 
 interface FormValues {
   connectionName: string;
@@ -29,7 +29,7 @@ export const useCreateNewUser = (): UseCreateNewUserState => {
 
       const { user } = await fetchApi<{ user: Auth0User }>(
         'POST',
-        'auth0/user_management_api_v2/user/create_user',
+        'auth0/user_management_api_v2/users/create_user',
         { connectionName, email },
       )
 
