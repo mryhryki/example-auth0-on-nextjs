@@ -7,7 +7,7 @@ import { useOrganization } from '@/hooks/useOrganization'
 import { useRemoveUserConnection } from '@/hooks/useRemoveUserConnection'
 
 export default function UsersPage() {
-  const { members, loading: loadingMembers } = useOrganizationMembers()
+  const { members, loading: loadingMembers, reload: reloadMembers } = useOrganizationMembers()
   const { invitations, loading: loadingInvitations } = useOrganizationInvitations()
   const { connectionsByOrganizationMetadata, loading: loadingOrganization } = useOrganization()
   const { removeUserConnection, loading: loadingRemoveUserConnection } = useRemoveUserConnection()
@@ -43,7 +43,7 @@ export default function UsersPage() {
                                       member.user_id ?? '',
                                       identity.provider,
                                       identity.user_id,
-                                    ).then()}
+                                    ).then(reloadMembers)}
                                   >
                                     → Remove
                                   </button>
