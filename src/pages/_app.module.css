@@ -47,6 +47,8 @@
 .content {
   bottom: 0;
   left: 240px;
+  overflow-x: hidden;
+  overflow-y: scroll;
   padding: 1rem;
   position: absolute;
   right: 0;
