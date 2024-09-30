@@ -50,13 +50,13 @@ export default function UsersNewPage() {
           <div>Member</div>
           <select
             value={values.email}
-            onChange={(event) => setValues((prev) => ({ ...prev, email: event.target.value }))}
+            onChange={(event) => setValues((prev) => ({ ...prev, userId: event.target.value }))}
           >
             {loadingOrganizationMembers ? <Loading /> : (
               members.map((member) => (
                 <option
-                  key={member.email}
-                  value={member.email}
+                  key={member.user_id}
+                  value={member.user_id}
                 >
                   {member.email}
                 </option>
