@@ -49,7 +49,7 @@ export default function UsersNewPage() {
         <label>
           <div>Member</div>
           <select
-            value={values.email}
+            value={values.userId}
             onChange={(event) => setValues((prev) => ({ ...prev, userId: event.target.value }))}
           >
             {loadingOrganizationMembers ? <Loading /> : (
