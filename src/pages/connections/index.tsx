@@ -35,7 +35,7 @@ export default function SsoConfigurationIndexPage(props: Auth0Session) {
             <Link href="/connections/new">Add new connection</Link>
             <ol>
               {connectionsByOrganizationMetadata.map((connection) => {
-                const { connectionId, displayName, name, enabled } = connection
+                const { connectionId, displayName, name, enabled, isDatabaseConnection } = connection
                 const loginUrl = `${baseUrl}&connection=${name}`
                 return (
                   <li key={connectionId}>
@@ -49,6 +49,9 @@ export default function SsoConfigurationIndexPage(props: Auth0Session) {
                         >
                           {loginUrl}
                         </Link>
+                      </li>
+                      <li>
+                        Database connection: <strong>{isDatabaseConnection ? 'Yes' : 'No'}</strong>
                       </li>
                       <li>
                         Enabled: <strong>{enabled ? 'Yes' : 'No'}</strong>
