@@ -15,8 +15,19 @@ export const auth0CallbackHandler = async (req: NextApiRequest, res: NextApiResp
   } catch (err: unknown) {
     console.error('Auth0 callback error:',err)
 
+    const errorType = req.query['error']
+    const errorDescription = req.query['error_description']
+    if (errorType === 'access_denied' &&
+        typeof errorDescription === 'string' &&
+        errorDescription.startsWith('request_re-login:')) {
+      const [, organization, connection] = errorDescription.split(':')
+      res.writeHead(307, { Location: `/api/auth/login?organization=${organization}&connection=${connection}` })
+      return
+    }
+
     res.writeHead(400, { "Content-Type": "text/html; charset=utf-8" });
-    const title = err instanceof Error ? err.message : "An error occurred";
+    const errorMessage = (err instanceof Error ? err.message : 'An error occurred')
+    const title = req.query['error'] ?? errorMessage
     res.send(`
       <!doctype html>
       <html lang="en">
@@ -26,10 +37,13 @@ export const auth0CallbackHandler = async (req: NextApiRequest, res: NextApiResp
       </head>
       <body style="max-width: 40rem; margin: 1rem auto;">
         <h1 style="font-size: 1.5rem;">${title}</h1>
-        <ul>${Object.entries(req.query).map(([key, value]): string => {
-          const values = Array.isArray(value) ? value : [value];
-          return `<li><strong>${key}:</strong><ul>${values.map((value) => `<li>${value}</li>`)}</ul></li>`;
-        }).join("")}</ul>
+        <ul>
+          <li><strong>Error Message</strong>:<ul><li>${errorMessage}</li></ul></li>
+          ${Object.entries(req.query).map(([key, value]): string => {
+      const values = Array.isArray(value) ? value : [value]
+      return `<li><strong>${key}:</strong><ul>${values.map((value) => `<li>${value}</li>`)}</ul></li>`
+    }).join('')}
+        </ul>
       </body>
       </html>
     `);
