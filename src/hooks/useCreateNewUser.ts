@@ -26,12 +26,12 @@ export const useCreateNewUser = (): UseCreateNewUserState => {
     event.preventDefault()
     if (!canSubmit) return
     try {
-      const { connectionName, email } = values
+      const { connectionName, email, emailVerified } = values
 
       const { user } = await fetchApi<{ user: Auth0User }>(
         'POST',
         'auth0/user_management_api_v2/users/create_user',
-        { connectionName, email },
+        { connectionName, email, emailVerified: emailVerified },
       )
 
       AppMessage.addInfoMessage(`Created a user: ${JSON.stringify(user)}`)
