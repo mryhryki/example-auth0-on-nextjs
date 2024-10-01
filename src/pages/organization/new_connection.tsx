@@ -1,17 +1,12 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
-import { GetServerSidePropsContext } from 'next'
 import { useCreateNewSsoConfiguration } from '@/hooks/useCreateNewSsoConfiguration'
-import { Auth0Session, getAuth0Session } from '@/utils/auth0/session'
 
-export default function OrganizationNewConnectionPage(props: Auth0Session) {
-  const { organization } = props
-  const { displayName, orgName } = organization
-
+export default function OrganizationNewConnectionPage() {
   const { values, setValues, canSubmit, onSubmit } = useCreateNewSsoConfiguration()
 
   return (
     <section>
-      <h1>Create NEW SSO Connection for <strong>{displayName}</strong> (Name:<strong>{orgName}</strong>)</h1>
+      <h1>Create NEW SSO Connection</h1>
       <form onSubmit={onSubmit}>
         <label>
           <div>Type</div>
@@ -60,16 +55,5 @@ export default function OrganizationNewConnectionPage(props: Auth0Session) {
   )
 }
 
-export const getServerSideProps = withPageAuthRequired({
-  getServerSideProps: async (ctx: GetServerSidePropsContext) => {
-    const session = await getAuth0Session(ctx.req, ctx.res)
-    return {
-      props: session,
-      redirect: session.organization.enableSSO ? undefined : {
-        permanent: false,
-        destination: "/access_info",
-      }
-    }
-  },
-})
+export const getServerSideProps = withPageAuthRequired({})
 
