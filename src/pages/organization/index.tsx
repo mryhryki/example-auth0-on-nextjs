@@ -26,7 +26,7 @@ export default function SsoConfigurationIndexPage() {
               <li>Name:<strong>{organization.name}</strong></li>
               <li>Display name:<strong>{organization.display_name}</strong></li>
               <li>
-                Enable SSO:<strong>{enableSSO ? 'Enabled' : 'Disabled'}</strong>
+                SSO:<strong>{enableSSO ? 'Enabled' : 'Disabled'}</strong>
                 <button
                   onClick={() => updateOrganizationMetadata({ enableSSO: enableSSO ? 'false' : 'true' })}
                   disabled={updating}
