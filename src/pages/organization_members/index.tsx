@@ -6,8 +6,11 @@ import { useOrganizationInvitations } from '@/hooks/useOrganizationInvitations'
 import { useOrganization } from '@/hooks/useOrganization'
 import { useRemoveUserConnection } from '@/hooks/useRemoveUserConnection'
 import { useUpdateUserMetadata } from '@/hooks/useUpdateUserMetadata'
+import { Auth0Session, getServerSidePropsForSession } from '@/utils/auth0/session'
 
-export default function UsersPage() {
+export default function UsersPage(props: Auth0Session) {
+  const { user } = props
+
   const { members, loading: loadingMembers, reload: reloadMembers } = useOrganizationMembers()
   const { invitations, loading: loadingInvitations } = useOrganizationInvitations()
   const { connectionsByOrganizationMetadata, loading: loadingOrganization } = useOrganization()
@@ -23,11 +26,13 @@ export default function UsersPage() {
         {loadingMembers ? <Loading /> : (
           <ol>
             {members.map((member, i) => {
+              const isMe = member.user_id === user.sub
               const identities = member.rawUserData?.identities ?? []
               const isAdministrator = member.rawUserData?.app_metadata?.['isAdministrator'] === true
               return (
                 <li key={member.user_id ?? i.toString()}>
                   <strong>{member.email ?? '(No email)'}</strong>
+                  {isMe && <span className="label">ME</span>}
                   <ul>
                     <li>ID:<strong>{member.user_id ?? 'No user_id'}</strong></li>
                     <li>
@@ -106,5 +111,6 @@ export default function UsersPage() {
   )
 }
 
-export const getServerSideProps = withPageAuthRequired({})
-
+export const getServerSideProps = withPageAuthRequired({
+  getServerSideProps: getServerSidePropsForSession,
+})
