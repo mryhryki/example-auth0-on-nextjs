@@ -31,7 +31,7 @@ export const useOrganization = (): UseOrganizationState => {
         '/auth0/user_management_api_v2/organizations/get_organization',
       )
       setOrganization(data.organization)
-      setConnectionsByOrganizationMetadata(getConnectionByOrganizationMetadata(data.organization.metadata))
+      setConnectionsByOrganizationMetadata(getConnectionByOrganizationMetadata(data.organization.metadata ?? {}))
     } catch (err) {
       AppMessage.addErrorMessage(`Failed to load organization: ${err}`)
     } finally {
