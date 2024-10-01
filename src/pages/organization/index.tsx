@@ -20,7 +20,7 @@ export default function SsoConfigurationIndexPage() {
       {loading || organization == null ? (<Loading />) : (
         <>
           <section>
-            <h2>Organization Info</h2>
+            <h2>Info</h2>
             <ul>
               <li>ID:<strong>{organization.id}</strong></li>
               <li>Name:<strong>{organization.name}</strong></li>
@@ -37,7 +37,7 @@ export default function SsoConfigurationIndexPage() {
             </ul>
           </section>
           <section>
-            <h2>Connection</h2>
+            <h2>Connections</h2>
             <Link href="/organization/new_connection">Add new connection</Link>
             <ol>
               {connectionsByOrganizationMetadata.map((connection) => {
