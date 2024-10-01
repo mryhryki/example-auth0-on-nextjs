@@ -53,6 +53,10 @@ input[type="file"] {
     padding:0.5rem;
 }
 
+input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
 input[type="submit"] {
     margin: 1rem 0 0 0;
     padding: 0.5rem 2rem;
