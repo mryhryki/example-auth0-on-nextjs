@@ -6,8 +6,17 @@
 * @see https://auth0.com/docs/customize/actions/explore-triggers/signup-and-login-triggers/login-trigger/post-login-event-object
 */
 exports.onExecutePostLogin = async (event, api) => {
-  const enabledConnectionIds = getEnabledConnectionIds(event);
+  const isEnabledSso = getEnabledSsoFlag(event);
   const loginConnection = getLoginConnectionId(event);
+
+  if (!isEnabledSso) {
+    if (loginConnection !== 'con_tvIjstW8g1vhIFB6' /* Username-Password-Authentication */) {
+      api.access.deny("sso_disabled");
+    }
+    return;
+  }
+
+  const enabledConnectionIds = getEnabledConnectionIds(event);
   const allowBackddor = isAllowBackddorUser(event);
 
   const useEnabledConnection = enabledConnectionIds.includes(loginConnection);
@@ -16,6 +25,11 @@ exports.onExecutePostLogin = async (event, api) => {
     api.access.deny("use_disabled_connection");
   }
 };
+
+function getEnabledSsoFlag(event) {
+  const metadata = event.organization?.metadata ?? {};
+  return metadata.enableSSO === "true";
+}
 
 function getEnabledConnectionIds(event) {
   const metadata = event.organization?.metadata ?? {};
