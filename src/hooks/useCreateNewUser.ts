@@ -6,6 +6,7 @@ import { Auth0User } from '@/pages/api/auth0/user_management_api_v2/users/create
 interface FormValues {
   connectionName: string;
   email: string
+  emailVerified: boolean;
 }
 
 interface UseCreateNewUserState {
@@ -16,7 +17,7 @@ interface UseCreateNewUserState {
 }
 
 export const useCreateNewUser = (): UseCreateNewUserState => {
-  const [values, setValues] = useState<FormValues>({ connectionName: '', email: '' })
+  const [values, setValues] = useState<FormValues>({ connectionName: '', email: '', emailVerified: false })
 
   const canSubmit: boolean = values.connectionName.trim().length > 0 &&
                              values.email.trim().length > 0 &&
