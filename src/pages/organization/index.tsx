@@ -30,7 +30,9 @@ export default function SsoConfigurationIndexPage() {
                 <button
                   onClick={() => updateOrganizationMetadata({ enableSSO: enableSSO ? 'false' : 'true' })}
                   disabled={updating}
-                >→ {enableSSO ? 'Disable' : 'Enable'}</button>
+                >
+                  → {enableSSO ? 'Disable' : 'Enable'}
+                </button>
               </li>
             </ul>
           </section>
