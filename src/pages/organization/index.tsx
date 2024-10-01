@@ -11,7 +11,7 @@ export default function SsoConfigurationIndexPage() {
     connectionsByOrganizationMetadata,
     updateOrganizationMetadata,
   } = useOrganization()
-  const enableSSO: boolean = organization?.metadata.enableSSO === 'true'
+  const enableSSO: boolean = organization?.metadata?.enableSSO === 'true'
   const baseUrl = `/api/auth/login?organization=${organization?.id ?? ''}`
 
   return (
