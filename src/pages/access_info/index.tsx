@@ -2,7 +2,7 @@ import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { Auth0Session, getServerSidePropsForSession } from '@/utils/auth0/session'
 
 export default function AccessInfoPage(props: Auth0Session) {
-  const { user, organization, accessToken } = props
+  const { user, accessToken } = props
 
   return (
     <>
@@ -13,15 +13,6 @@ export default function AccessInfoPage(props: Auth0Session) {
           <li>Email verified:<strong>{user.email_verified.toString()}</strong></li>
           <li>SID:<strong>{user.sid}</strong></li>
           <li>Sub:<strong>{user.sub}</strong></li>
-        </ul>
-      </section>
-      <section>
-        <h2>Organization</h2>
-        <ul>
-          <li>ID:<strong>{organization.orgId}</strong></li>
-          <li>Name:<strong>{organization.orgName}</strong></li>
-          <li>Display name:<strong>{organization.displayName}</strong></li>
-          <li>Enable SSO:<strong>{organization.enableSSO ? 'true' : 'false'}</strong></li>
         </ul>
       </section>
       <section>
