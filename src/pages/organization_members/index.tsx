@@ -5,12 +5,14 @@ import { Loading } from '@/components/loading/Loading'
 import { useOrganizationInvitations } from '@/hooks/useOrganizationInvitations'
 import { useOrganization } from '@/hooks/useOrganization'
 import { useRemoveUserConnection } from '@/hooks/useRemoveUserConnection'
+import { useUpdateUserMetadata } from '@/hooks/useUpdateUserMetadata'
 
 export default function UsersPage() {
   const { members, loading: loadingMembers, reload: reloadMembers } = useOrganizationMembers()
   const { invitations, loading: loadingInvitations } = useOrganizationInvitations()
   const { connectionsByOrganizationMetadata, loading: loadingOrganization } = useOrganization()
   const { removeUserConnection, loading: loadingRemoveUserConnection } = useRemoveUserConnection()
+  const { updateUserMetadata, updating } = useUpdateUserMetadata()
 
   return (
     <>
@@ -21,41 +23,54 @@ export default function UsersPage() {
         {loadingMembers ? <Loading /> : (
           <ol>
             {members.map((member, i) => {
-                const identities = member.rawUserData?.identities ?? []
-                return (
-                  <li key={member.user_id ?? i.toString()}>
-                    <strong>{member.email ?? '(No email)'}</strong>
-                    <ul>
-                      <li>ID:<strong>{member.user_id ?? 'No user_id'}</strong></li>
-                      <li>Connections:
-                        <ul>
-                          {identities.map((identity) => {
-                            const canRemove = identities.length >= 2 &&
-                                              identity.connection !== 'Username-Password-Authentication'
-                            return (
-                              <li key={identity.connection}>
-                                <strong key={identity.connection}>
-                                  {identity.connection}
-                                </strong>
-                                {canRemove && (loadingRemoveUserConnection ? <Loading /> : (
-                                  <button
-                                    onClick={() => removeUserConnection(
-                                      member.user_id ?? '',
-                                      identity.provider,
-                                      identity.user_id,
-                                    ).then(reloadMembers)}
-                                  >
-                                    → Remove
-                                  </button>
-                                ))}
-                              </li>
-                            )
-                          })}
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-                )
+              const identities = member.rawUserData?.identities ?? []
+              const isAdministrator = member.rawUserData?.app_metadata?.['isAdministrator'] === true
+              return (
+                <li key={member.user_id ?? i.toString()}>
+                  <strong>{member.email ?? '(No email)'}</strong>
+                  <ul>
+                    <li>ID:<strong>{member.user_id ?? 'No user_id'}</strong></li>
+                    <li>
+                      Admin: <strong>{isAdministrator ? 'Yes' : 'No'}</strong>
+                      <button
+                        onClick={() => updateUserMetadata(
+                          member.user_id ?? '',
+                          { isAdministrator: !isAdministrator },
+                        ).then(reloadMembers)}
+                        disabled={updating}
+                      >
+                        → {isAdministrator ? 'Remove' : 'Change to Admin'}
+                      </button>
+                    </li>
+                    <li>Connections:
+                      <ul>
+                        {identities.map((identity) => {
+                          const canRemove = identities.length >= 2 &&
+                                            identity.connection !== 'Username-Password-Authentication'
+                          return (
+                            <li key={identity.connection}>
+                              <strong key={identity.connection}>
+                                {identity.connection}
+                              </strong>
+                              {canRemove && (loadingRemoveUserConnection ? <Loading /> : (
+                                <button
+                                  onClick={() => removeUserConnection(
+                                    member.user_id ?? '',
+                                    identity.provider,
+                                    identity.user_id,
+                                  ).then(reloadMembers)}
+                                >
+                                  → Remove
+                                </button>
+                              ))}
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              )
               },
             )}
         </ol>
