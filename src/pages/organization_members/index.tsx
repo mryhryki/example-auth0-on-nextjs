@@ -16,7 +16,7 @@ export default function UsersPage() {
 
   return (
     <>
-      <h1>Users</h1>
+      <h1>Organization Members</h1>
       <section>
         <h2>1. Users</h2>
         <Link href="/organization_members/new">Create a user</Link>
