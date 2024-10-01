@@ -62,11 +62,12 @@ export default withApiAuthRequired(async (
 ) => {
   try {
     const organizationId = await getOrganizationId(req, res)
-    const { connectionName, email } = req.body
+    const { connectionName, email, emailVerified } = req.body
     const { data } = await auth0ManagementClient.users.create({
       email,
       connection: connectionName,
       password: generateRandomPassword(),
+      email_verified: emailVerified,
     })
 
     await auth0ManagementClient.organizations.addMembers({ id: organizationId }, { members: [data.user_id] })
