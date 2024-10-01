@@ -47,6 +47,14 @@ export default function UsersNewPage() {
             onChange={(event) => setValues((prev) => ({ ...prev, email: event.target.value }))}
           />
         </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={values.emailVerified}
+            onChange={(event) => setValues((prev) => ({ ...prev, emailVerified: event.target.checked }))}
+          />
+          Email Verified (Email will not be sent)
+        </label>
         <input type="submit" value="Create" disabled={!canSubmit} />
       </form>
     </section>
