@@ -21,7 +21,10 @@ export const useOrganizationMembers = (): UseOrganizationMembersState => {
       'GET',
       '/auth0/user_management_api_v2/organizations/get_members',
     ).then((data) => {
-      setMembers(data.members)
+      const members = data.members.sort(({ email: email1 }, { email: email2 }) => {
+        return (email1 ?? "") <= (email2 ?? "") ? -1 : 1
+      })
+      setMembers(members)
     }).catch((err) => {
       AppMessage.addErrorMessage(`Failed to load members: ${err}`)
     }).finally(() => {
