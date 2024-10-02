@@ -17,17 +17,27 @@ SelectLoginPage.disableDefaultLayout = true
 export default function SelectLoginPage(props: SelectLoginPageProps) {
   const { connection, organization, otherOrganizations } = props
 
+  const previousOrganizationLoginUrl = `/api/auth/login?organization=${organization}`;
   const previousLoginMethodUrl = `/api/auth/login?organization=${organization}&connection=${connection}`;
   const loginWithIdAndPasswordUrl = '/api/auth/login?connection=Username-Password-Authentication';
 
   return (
-    <main style={{ maxWidth: '40rem', margin: '0 auto'}}>
+    <main style={{ maxWidth: '40rem', margin: '0 auto' }}>
       <h1>Choose the Login Method</h1>
 
-      <p>If you would like to log in using the same method as last time, please click the following link:</p>
-      <Link href={previousLoginMethodUrl}>
-        {previousLoginMethodUrl}
+      <p>If you would like to log in to same organization, please click the following link:</p>
+      <Link href={previousOrganizationLoginUrl}>
+        {previousOrganizationLoginUrl}
       </Link>
+
+      {connection != null && (
+        <>
+          <p>If you would like to log in using the same method as last time, please click the following link:</p>
+          <Link href={previousLoginMethodUrl}>
+            {previousLoginMethodUrl}
+          </Link>
+        </>
+      )}
 
       {otherOrganizations.length > 0 && (
         <>
@@ -47,7 +57,7 @@ export default function SelectLoginPage(props: SelectLoginPageProps) {
         </>
       )}
 
-      <p>If you would like to log in using your ID and password, please click the following link:</p>
+      <p>If you would like to log in using your email and password, please click the following link:</p>
       <Link href={loginWithIdAndPasswordUrl}>
         {loginWithIdAndPasswordUrl}
       </Link>
