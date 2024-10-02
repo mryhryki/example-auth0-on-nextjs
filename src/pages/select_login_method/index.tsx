@@ -25,14 +25,14 @@ export default function SelectLoginPage(props: SelectLoginPageProps) {
     <main style={{ maxWidth: '40rem', margin: '0 auto' }}>
       <h1>Choose the Login Method</h1>
 
-      <p>If you would like to log in to same organization, please click the following link:</p>
+      <p>If you would like to login to same organization, please click the following link:</p>
       <Link href={previousOrganizationLoginUrl}>
         {previousOrganizationLoginUrl}
       </Link>
 
       {connection != null && (
         <>
-          <p>If you would like to log in using the same method as last time, please click the following link:</p>
+          <p>If you would like to login using the same method as last time, please click the following link:</p>
           <Link href={previousLoginMethodUrl}>
             {previousLoginMethodUrl}
           </Link>
@@ -57,12 +57,12 @@ export default function SelectLoginPage(props: SelectLoginPageProps) {
         </>
       )}
 
-      <p>If you would like to log in using your email and password, please click the following link:</p>
+      <p>If you would like to login using your email and password, please click the following link:</p>
       <Link href={loginWithIdAndPasswordUrl}>
         {loginWithIdAndPasswordUrl}
       </Link>
 
-      <p>If you would like to log in with other organization, please use the exclusive link.</p>
+      <p>If you would like to login with other organization, please use the exclusive link.</p>
     </main>
   )
 }
