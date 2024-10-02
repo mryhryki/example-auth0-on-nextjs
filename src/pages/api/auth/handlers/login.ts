@@ -14,8 +14,7 @@ export const auth0LoginHandler = async (req: NextApiRequest, res: NextApiRespons
 
   if (organizationByQuery == null &&
       connectionByQuery == null &&
-      organizationByCookie != null &&
-      connectionByCookie != null) {
+      organizationByCookie != null) {
     return res.redirect(
       307,
       `/select_login_method?organization=${organizationByCookie}&connection=${connectionByCookie}`,
