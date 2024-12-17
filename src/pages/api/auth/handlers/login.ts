@@ -27,7 +27,7 @@ export const auth0LoginHandler = async (req: NextApiRequest, res: NextApiRespons
       organization: organizationByQuery ?? undefined,
       connection: (organizationByQuery != null || invitation != null) ?
         undefined :
-        connectionByQuery ?? 'Username-Password-Authentication',
+        connectionByQuery ?? undefined // ?? 'Username-Password-Authentication',
     },
   });
 };
