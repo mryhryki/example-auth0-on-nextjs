@@ -11,20 +11,20 @@
     "auth0:export": "a0deploy export --format=yaml --config_file=./auth0-deploy-cli/config.json --output_folder ./auth0-deploy-cli/"
   },
   "dependencies": {
-    "auth0": "^4.4.0",
-    "next": "14.2.13",
-    "react": "^18",
-    "react-dom": "^18"
+    "auth0": "^4.15.0",
+    "next": "15.1.0",
+    "react": "^19",
+    "react-dom": "^19"
   },
   "devDependencies": {
     "@auth0/nextjs-auth0": "3.5.0",
     "@types/auth0": "3.3.10",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "auth0-deploy-cli": "7.21.0",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.13",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "auth0-deploy-cli": "8.4.1",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.0",
     "typescript": "^5"
   }
 }
