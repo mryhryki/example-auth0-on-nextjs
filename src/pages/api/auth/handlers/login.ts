@@ -1,8 +1,15 @@
+import { filterString } from '@/utils/string'
 import { handleLogin } from '@auth0/nextjs-auth0'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { filterString } from '@/utils/string'
 
 export const auth0LoginHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const method = filterString(req.query.method)
+
+  if (method === 'HRD') {
+    await handleLogin(req, res)
+    return
+  }
+
   // Ref: https://github.com/auth0/nextjs-auth0/issues/701#issuecomment-1255350171
   const invitation = filterString(req.query.invitation);
   const organizationByQuery = filterString(req.query.organization)
@@ -27,7 +34,7 @@ export const auth0LoginHandler = async (req: NextApiRequest, res: NextApiRespons
       organization: organizationByQuery ?? undefined,
       connection: (organizationByQuery != null || invitation != null) ?
         undefined :
-        connectionByQuery ?? undefined // ?? 'Username-Password-Authentication',
+        connectionByQuery ?? 'Username-Password-Authentication',
     },
   });
 };
